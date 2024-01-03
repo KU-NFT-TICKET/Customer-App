@@ -3,11 +3,9 @@ import { ethers } from 'ethers'
 import Web3 from 'web3';
 import {BrowserRouter as Router, Link} from 'react-router-dom'
 import Resizer from "react-image-file-resizer";
+import {scanData, getData, putData} from './dynamoDB';
 import { AlexaForBusiness } from "aws-sdk";
 import axios from "axios"
-import { connect } from "react-redux";
-
-axios.defaults.headers.common['Authorization'] = process.env.REACT_APP_API_TOKEN
 
 class Home extends React.Component {
 
@@ -15,8 +13,8 @@ class Home extends React.Component {
     this.onConnected()
   }
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
 
     this.state = {
       isConnected: false,
@@ -35,19 +33,18 @@ class Home extends React.Component {
     await provider.send("eth_requestAccounts", []);
     const accounts = await provider.listAccounts();
     // console.log(accounts[0])
-    
+
     var html = []
     try{
-      var q = {bind: [accounts[0]]}
-      const ownEvent = await axios.post(process.env.REACT_APP_API_BASE_URL+"/events_of_account", q)
+      var q = {query: "select event_id, event_name, DATE_FORMAT(date_sell, '%d %b %Y %T') as date_sell from Events where creator = ?", bind: [accounts[0]]}
+      const ownEvent = await axios.post("http://localhost:8800/select", q)
       console.log(ownEvent)
       for (const data of ownEvent.data) {
         console.log(data)
         let link = "/detail/"+data['event_id'];
-        // var url = "https://nft-event-picture.s3.ap-northeast-1.amazonaws.com/poster/"+data['event_id']+".png";
-        var url = "https://"+process.env.REACT_APP_S3_BUCKET+".s3."+process.env.REACT_APP_S3_REGION+".amazonaws.com/poster/"+data['event_id']+".png";
+        var url = "https://nft-event-picture.s3.ap-northeast-1.amazonaws.com/poster/"+data['event_id']+".png";
         html.push((
-          <div className="col-sm-3" style={{margin: '0.5%'}}><div className="card card-style">
+          <div className="col-sm-3"><div className="card card-style">
             <img src={url} className="card-img-top card-img" alt="..." />
             <div className="card-body">
               <h5 className="card-title">{data['event_name']}</h5>
@@ -93,25 +90,14 @@ class Home extends React.Component {
   }
 
   render() {
-    if (this.props.account_detail.isLogin) {
-      return (
-        <div>
-          <h1 style={{color: 'snow'}}>ALL EVENT</h1>
-          <div className="row">
-            {this.state.htmlListEvent}
-          </div>
+    return (
+      <div>
+        <h1 style={{color: 'snow'}}>ALL EVENT</h1>
+        <div className="row">
+          {this.state.htmlListEvent}
         </div>
-      );
-    } else {
-      return (
-        <div className="card mb-3 panel-style">
-          <div className="card-body">
-            <h5 className="card-title">Welcome to NFT Ticket</h5>
-            <p className="card-text">Try to create your first Event go to Create tab.</p>
-          </div>
-        </div>
-      );
-    }
+      </div>
+    );
   }
   
   componentDidUpdate(_, prevState) {
@@ -120,8 +106,4 @@ class Home extends React.Component {
 
 }
  
-const mapStateToProps = (state) => ({
-  account_detail: state.account
-});
-
-export default connect(mapStateToProps)(Home);
+export default Home;
