@@ -22,7 +22,7 @@ import SignupForm from './SignupForm'
 import AccountTab from './AccountTab'
 
 // axios.defaults.headers.common['Authorization'] = process.env.REACT_APP_API_TOKEN
-axios.defaults.headers.common['Authorization'] = 'Basic '+ Buffer.from(process.env.REACT_APP_API_TOKEN).toString('base64');
+// axios.defaults.headers.common['Authorization'] = 'Basic '+ Buffer.from(process.env.REACT_APP_API_TOKEN).toString('base64');
 
 class OnboardingButton extends React.Component {
   constructor () {
