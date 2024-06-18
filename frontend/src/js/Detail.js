@@ -25,7 +25,7 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import { decode_thaiID } from '../features/function'
 
-axios.defaults.headers.common['Authorization'] = 'Basic '+ Buffer.from(process.env.REACT_APP_API_TOKEN).toString('base64');
+// axios.defaults.headers.common['Authorization'] = 'Basic '+ Buffer.from(process.env.REACT_APP_API_TOKEN).toString('base64');
 
 class Detail extends React.Component {
   constructor(props) {
