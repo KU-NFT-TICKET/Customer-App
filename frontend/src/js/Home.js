@@ -8,7 +8,7 @@ import axios from "axios"
 import { connect } from "react-redux";
 
 // axios.defaults.headers.common['Authorization'] = process.env.REACT_APP_API_TOKEN
-axios.defaults.headers.common['Authorization'] = 'Basic '+ Buffer.from(process.env.REACT_APP_API_TOKEN).toString('base64');
+// axios.defaults.headers.common['Authorization'] = 'Basic '+ Buffer.from(process.env.REACT_APP_API_TOKEN).toString('base64');
 
 class Home extends React.Component {
 
