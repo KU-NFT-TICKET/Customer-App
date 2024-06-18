@@ -12,7 +12,7 @@ import { faCalendarDays, faLocationDot, faDollarCircle } from '@fortawesome/free
 import { formatInTimeZone } from 'date-fns-tz';
 import Swal from 'sweetalert2'
 import 'bootstrap/dist/js/bootstrap.bundle';
-import contractTicketPlace from '../../../contracts/ticketMarketPlace.json'
+import contractTicketPlace from '../../../contracts/TicketMarketplace.json'
 // import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
 class TicketBox extends React.Component {
@@ -462,16 +462,6 @@ class TicketBox extends React.Component {
           </div>
         </div>
       </div>
-      // <li>
-      //   Seat:{seat_id} &nbsp;
-      //   Zone:{this.props.ticket_detail['zone']} &nbsp;
-      //   Price:{price} &nbsp;
-      //   <span className={load_className}>Status: {ticket_status}</span> &nbsp;
-      //   <span style={cancel_display} >New_Price: {market_price}</span> &nbsp;
-        
-      //   <button type="button" onClick={this.popup_sellform} disabled={sell_disabled} style={sell_display} >Sell</button>
-      //   <button type="button" onClick={this.handleCancelSell} disabled={cancel_disabled} style={cancel_display} >Cancel</button>
-      // </li>
     )
   }
 }

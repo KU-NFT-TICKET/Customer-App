@@ -1,6 +1,5 @@
 import React from 'react'
 import $ from 'jquery';
-import format from 'date-fns/format';
 import axios from "axios"
 import Swal from 'sweetalert2'
 import HtmlTooltip from '@mui/material/Tooltip';
@@ -11,7 +10,6 @@ import { faBan } from '@fortawesome/free-solid-svg-icons'
 import { ReactComponent as AvaxCircle } from '../../img/Avalanche_AVAX_Black.svg';
 import { ReactComponent as Avax } from '../../img/avax-icon.svg';
 import { v5 as uuidv5 } from 'uuid';
-import { NavLink } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import withRouter from '../../js/withRouter';
@@ -25,10 +23,7 @@ import {
   updateSeatDetail,
   updateSelectedZone, 
   setupPurchaseResult, 
-  updateMarketPrice,
-  nextPurchaseState,
   setOrderID, 
-  resetOrderID,
 } from '../../features/purchase/purchaseSlice';
 import BookingBox from './BookingBox'
 

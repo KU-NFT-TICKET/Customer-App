@@ -1,11 +1,7 @@
 import React from 'react'
-import $ from 'jquery';
 import { formatInTimeZone } from 'date-fns-tz';
-import { BigNumber, ethers } from 'ethers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDays, faLocationDot, faClock, faCalendarPlus, faCircleDollarToSlot, faTicket } from '@fortawesome/free-solid-svg-icons'
-import { faBell } from '@fortawesome/free-solid-svg-icons'
-import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 
 class SeatingHeader extends React.Component {

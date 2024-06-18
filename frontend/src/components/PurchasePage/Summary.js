@@ -24,30 +24,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { compose } from "redux";
 import { connect } from "react-redux";
-import { 
-  updateEventDetail, 
-  setSeatDetail, 
-  updateSeatDetail, 
-  resetSeatSelection, 
-  updateSelectedZone, 
-  nextPurchaseState,
-  backPurchaseState,
-  jumpPurchaseState, 
-  resetPurchaseState, 
-  updateSingleGasFee, 
-  updateSingle2ndGasFee, 
-  setupPurchaseResult, 
-  updatePurchaseResult, 
-  setOrderID, 
-  resetOrderID, 
-  resetPurchaseResult, 
-  resetPurchaseDetail, 
-  updateMarketPrice, 
-} from '../../features/purchase/purchaseSlice';
-import contractTicketPlace from '../../contracts/ticketMarketPlace.json'
-
-// axios.defaults.headers.common['Authorization'] = process.env.REACT_APP_API_TOKEN
-// axios.defaults.headers.common['Authorization'] = 'Basic '+ Buffer.from(process.env.REACT_APP_API_TOKEN).toString('base64');
 
 export class Summary extends React.Component {
   constructor(props) {

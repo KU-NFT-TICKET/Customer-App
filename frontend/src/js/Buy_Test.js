@@ -2,7 +2,6 @@ import React, { useRef } from 'react'
 import { BigNumber, ethers } from 'ethers'
 import $ from 'jquery';
 import axios from "axios"
-import contractTicketPlace from '../contracts/ticketMarketPlace.json'
 import { ReactComponent as Avax } from '../img/Avalanche_AVAX_Black.svg';
 import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
@@ -41,83 +40,10 @@ export class Buy_Test extends React.Component {
     // this.buy_ticket = this.buy_ticket.bind(this) 
     this.onConnected = this.onConnected.bind(this)
     this.get_trx_detail = this.get_trx_detail.bind(this)
-    this.sell_ticket = this.sell_ticket.bind(this)
-    this.buy_ticket_from_market = this.buy_ticket_from_market.bind(this)
-    this.cancel_sell = this.cancel_sell.bind(this)
     this.get_bc_log = this.get_bc_log.bind(this)
     this.test_api = this.test_api.bind(this)
     this.get_wallets = this.get_wallets.bind(this)
     // this.buy_ticket_test = this.buy_ticket_test.bind(this)
-  }
-
-  async sell_ticket(ticket_id, price, gas){
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    // await provider.send("eth_requestAccounts", []);
-
-    const contractMaket = await new ethers.Contract(
-      process.env.REACT_APP_TICKET_ADDRESS,
-      contractTicketPlace.output.abi,
-      provider.getSigner(),
-    )
-
-    // console.log("smart contract = ")
-    // console.log(await contractMaket.name())
-    // console.log(process.env.REACT_APP_TICKET_ADDRESS)
-    // console.log(contractMaket);
-
-    const sell_resp = await contractMaket.addProduct(
-      ticket_id, 
-      price, 
-      gas, 
-    )
-    console.log(sell_resp)
-
-    return sell_resp
-  }
-
-  async buy_ticket_from_market(){
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    // await provider.send("eth_requestAccounts", []);
-
-    const contractMaket = await new ethers.Contract(
-      process.env.REACT_APP_TICKET_ADDRESS,
-      contractTicketPlace.output.abi,
-      provider.getSigner(),
-    )
-
-    console.log("smart contract = ")
-    console.log(await contractMaket.name())
-    console.log(process.env.REACT_APP_TICKET_ADDRESS)
-    console.log(contractMaket);
-
-    let ticketId = 1221
-
-    const buy_resp = await contractMaket.buyProduct(
-      ticketId
-    )
-    console.log(buy_resp)
-  }
-
-  async cancel_sell(ticket_id){
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    // await provider.send("eth_requestAccounts", []);
-
-    const contractMaket = await new ethers.Contract(
-      process.env.REACT_APP_TICKET_ADDRESS,
-      contractTicketPlace.output.abi,
-      provider.getSigner(),
-    )
-
-    console.log("smart contract = ")
-    console.log(await contractMaket.name())
-    console.log(process.env.REACT_APP_TICKET_ADDRESS)
-    console.log(contractMaket);
-
-    const cancel_resp = await contractMaket.cancelProduct(
-      ticket_id
-    )
-    console.log(cancel_resp)
-    return cancel_resp
   }
 
   async get_wallets() { 

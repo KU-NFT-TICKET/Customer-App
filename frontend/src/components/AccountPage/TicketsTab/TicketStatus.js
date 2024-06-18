@@ -1,18 +1,6 @@
 import React from 'react'
-import ReactDOM from 'react-dom';
-import $ from 'jquery';
-import axios from "axios"
-import parseISO from 'date-fns/parseISO';
-import { BigNumber, ethers } from 'ethers'
 import { connect } from "react-redux";
-import { BrowserRouter, Link } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarDays, faLocationDot, faDollarCircle, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
-import { formatInTimeZone } from 'date-fns-tz';
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
 import 'bootstrap/dist/js/bootstrap.bundle';
-import contractTicketPlace from '../../../contracts/ticketMarketPlace.json'
 // import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
 class TicketStatus extends React.Component {

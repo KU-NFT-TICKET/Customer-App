@@ -1,7 +1,4 @@
 import React from 'react'
-import $ from 'jquery';
-import axios from "axios"
-import { BigNumber, ethers } from 'ethers'
 import { connect } from "react-redux";
 import { encode_thaiID, decode_thaiID, sortArrayByMultipleKeys } from '../../../features/function'
 // import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';

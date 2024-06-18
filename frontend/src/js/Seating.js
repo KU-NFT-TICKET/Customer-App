@@ -51,7 +51,7 @@ import {
   get_buyProduct_gasFee,
   get_2ndHand_price,
 } from '../features/function'
-import contractTicketPlace from '../contracts/ticketMarketPlace.json'
+import contractTicketPlace from '../contracts/TicketMarketplace.json'
 import ZoneAvailabilityBox from '../components/PurchasePage/ZoneAvailabilityBox'
 import ZoneDetail from '../components/PurchasePage/ZoneDetail'
 

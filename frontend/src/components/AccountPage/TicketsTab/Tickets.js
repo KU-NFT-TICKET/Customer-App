@@ -1,10 +1,8 @@
 import React from 'react'
 import $ from 'jquery';
 import axios from "axios"
-import { BigNumber, ethers } from 'ethers'
 import { connect } from "react-redux";
 import { 
-  decode_thaiID, 
   sortArrayByMultipleKeys, 
   get_2ndHand_price, 
   get_ticket_status, 

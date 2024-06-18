@@ -2,7 +2,6 @@ import React, { useRef } from 'react'
 import { BigNumber, ethers } from 'ethers'
 import $ from 'jquery';
 import axios from "axios"
-import contractTicketPlace from '../contracts/ticketMarketPlace.json'
 import format from 'date-fns/format';
 import Swal from 'sweetalert2'
 import { connect } from "react-redux";

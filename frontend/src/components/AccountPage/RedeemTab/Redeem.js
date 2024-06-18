@@ -1,14 +1,10 @@
 import React from 'react'
-import $ from 'jquery';
 import axios from "axios"
 import { BigNumber, ethers } from 'ethers'
 import { connect } from "react-redux";
 import { 
-  is_ticket_available, 
   gen_purchase_form, 
   get_createTicket_gasFee,
-  get_buyProduct_gasFee,
-  get_2ndHand_price,
 } from '../../../features/function'
 import { updateAllEvents } from '../../../features/events/eventSlice';
 import Ticket from './Ticket'

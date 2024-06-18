@@ -1,21 +1,16 @@
 import React from 'react'
-import ReactDOM from 'react-dom';
-import $ from 'jquery';
 import axios from "axios"
-import parseISO from 'date-fns/parseISO';
 import { BigNumber, ethers } from 'ethers'
 import { v5 as uuidv5 } from 'uuid';
 import withRouter from '../../../js/withRouter';
 import { compose } from "redux";
 import { connect } from "react-redux";
-import { BrowserRouter, Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDays, faLocationDot, faDollarCircle, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import { formatInTimeZone } from 'date-fns-tz';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import 'bootstrap/dist/js/bootstrap.bundle';
-import contractTicketPlace from '../../../contracts/ticketMarketPlace.json'
 import { 
     createTicket
 } from '../../../features/function'

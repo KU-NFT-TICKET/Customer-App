@@ -1,7 +1,4 @@
 import React from 'react'
-import $ from 'jquery';
-import format from 'date-fns/format';
-import { BigNumber, ethers } from 'ethers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-solid-svg-icons'
 import { NavLink } from "react-router-dom";

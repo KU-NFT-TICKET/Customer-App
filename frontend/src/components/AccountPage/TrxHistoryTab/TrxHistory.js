@@ -1,13 +1,9 @@
 import React from 'react'
-import $ from 'jquery';
 import axios from "axios"
-import { BigNumber, ethers } from 'ethers'
 import {format, parseISO, differenceInMinutes, addMinutes} from 'date-fns';
 import { connect } from "react-redux";
 import { decode_thaiID, sortArrayByMultipleKeys } from '../../../features/function'
-import TrxHistoryPanel from './TrxHistoryPanel'
 import OrderBox from './OrderBox'
-import { updateAccountList } from '../../../features/account/accountSlice';
 import { updateAllEvents } from '../../../features/events/eventSlice';
 // import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 

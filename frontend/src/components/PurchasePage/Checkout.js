@@ -1,47 +1,19 @@
 import React from "react";
 import { BigNumber, ethers } from 'ethers'
-import Web3 from 'web3';
-import $ from 'jquery';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDays, faLocationDot, faClock, faCalendarPlus, faCircleDollarToSlot, faTicket } from '@fortawesome/free-solid-svg-icons'
 import { ReactComponent as Avax } from '../../img/avax-icon.svg';
-import DatePicker from 'react-datepicker';
-import setHours from "date-fns/setHours";
-import setMinutes from "date-fns/setMinutes";
 import { formatInTimeZone } from 'date-fns-tz';
-import addDays from "date-fns/addDays";
-import { FileUploader } from "react-drag-drop-files";
-import Resizer from "react-image-file-resizer";
-import { Buffer } from 'buffer';
 import Swal from 'sweetalert2'
 import withRouter from '../../js/withRouter';
-import axios from "axios"
-import Select from 'react-select'
-import CryptoJS from 'crypto-js'
 import {BrowserRouter as Router, Link, useNavigate} from 'react-router-dom'
 import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { 
-  updateEventDetail, 
-  setSeatDetail, 
-  updateSeatDetail, 
-  resetSeatSelection, 
-  updateSelectedZone, 
   nextPurchaseState,
   backPurchaseState,
-  jumpPurchaseState, 
-  resetPurchaseState, 
-  updateSingleGasFee, 
-  updateSingle2ndGasFee, 
-  setupPurchaseResult, 
-  updatePurchaseResult, 
-  setOrderID, 
-  resetOrderID, 
-  resetPurchaseResult, 
-  resetPurchaseDetail, 
-  updateMarketPrice, 
 } from '../../features/purchase/purchaseSlice';
 import Timer from "../Timer"
 

@@ -21,7 +21,6 @@ import {
   get_cancelProduct_gasFee,
 } from '../../../features/function'
 import { updateAllEvents } from '../../../features/events/eventSlice';
-import contractTicketPlace from '../../../contracts/ticketMarketPlace.json'
 // import MyTicketsPanel from './MyTicketsPanel'
 import TicketStatus from './TicketStatus'
 import SellPopup from './SellPopup'

@@ -2,7 +2,7 @@ import CryptoJS from 'crypto-js'
 import { BigNumber, ethers } from 'ethers'
 // import format from 'date-fns/format';
 import { formatInTimeZone } from 'date-fns-tz';
-import contractTicketPlace from '../contracts/ticketMarketPlace.json'
+import contractTicketPlace from '../contracts/TicketMarketplace.json'
 
 
 export function sortArrayByDateKey(array, key, reverse) {
