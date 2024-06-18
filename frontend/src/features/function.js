@@ -463,6 +463,9 @@ export async function get_addProduct_gasFee(ticket_id, price, gas, owner) {
 }
 
 export async function get_buyProduct_gasFee(ticket_id, price, buyer) {
+	console.log(ticket_id)
+	console.log(price)
+	console.log(buyer)
 	let estimation_gas = 0;
 
 	// gas

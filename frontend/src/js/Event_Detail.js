@@ -110,6 +110,7 @@ class Event_Detail extends React.Component {
 
       if (this.props.purchase.single_2nd_gas_fee === "0" && seat_detail.in_marketplace !== null) {
         let {price: resale_price} = await get_2ndHand_price(seat_detail.ticket_id)
+        console.log(resale_price)
         let total_2nd_gas = await get_buyProduct_gasFee(seat_detail.ticket_id, resale_price._hex, this.props.account_detail.wallet_accounts[0])
         await this.props.dispatch(updateSingle2ndGasFee(total_2nd_gas._hex))
       }

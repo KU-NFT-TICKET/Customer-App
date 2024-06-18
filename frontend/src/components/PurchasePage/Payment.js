@@ -102,7 +102,7 @@ export class Payment extends React.Component {
         if (Object.keys(this.props.purchase.marketplace_prices).includes(ticket_id)) {
           let market_price = this.props.purchase.marketplace_prices[ticket_id]
           purchase_resp = await buyProduct(ticket_id, market_price)
-          update_bind["is_2nd_update"] = 'Y'
+          update_bind["is_2ndHand"] = 'Y'
         } else {
           purchase_resp = await createTicket(this.props.purchase.purchase_results[ticket_id]["purchase_form"])
         }

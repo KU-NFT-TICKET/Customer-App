@@ -81,8 +81,6 @@ export class Seating extends React.Component {
     this.baseState = this.state
 
     this.onConnected = this.onConnected.bind(this)
-    this.get_single_gas_fee = this.get_single_gas_fee.bind(this)
-    this.get_single_2nd_gas_fee = this.get_single_2nd_gas_fee.bind(this)
     this.set_market_prices = this.set_market_prices.bind(this)
     this.selectZone = this.selectZone.bind(this)
     this.transform_seat_data = this.transform_seat_data.bind(this)
@@ -122,52 +120,6 @@ export class Seating extends React.Component {
       // Update your UI or trigger other actions based on the emitted event
       // ...
     });
-  }
-
-  async get_single_gas_fee() {
-
-    let firsthand_tickets = []
-    
-    if (this.props.purchase.seatSelection === 0) {
-
-    } else if (this.props.purchase.seat2ndSelection > 0) {
-      firsthand_tickets = this.props.purchase.seatSelection.filter(x => !this.props.purchase.seat2ndSelection.includes(x))
-    } else {
-      firsthand_tickets = this.props.purchase.seatSelection
-    }
-
-    if (firsthand_tickets.length > 0) {
-      let seat_detail = this.props.purchase.seatDetail[this.props.purchase.selected_zone][firsthand_tickets[0]]
-      let purchase_form = gen_purchase_form(
-        seat_detail, 
-        this.props.events.all_events[this.props.event_id], 
-        this.props.account_detail.wallet_accounts[0], 
-        this.props.account_detail.timezone
-      )
-      let total_gas = await get_createTicket_gasFee(purchase_form)
-
-      this.props.dispatch(updateSingleGasFee(total_gas._hex))
-    } else {
-      this.props.dispatch(updateSingleGasFee("0"))
-    }
-    
-  }
-
-  async get_single_2nd_gas_fee() {
-    let secondhand_tickets = this.props.purchase.seat2ndSelection
-
-    console.log(this.props.purchase.marketplace_prices)
-    if (secondhand_tickets.length > 0) {
-      let ticket_id = secondhand_tickets[0]
-      let price = this.props.purchase.marketplace_prices[ticket_id]
-      console.log(ticket_id)
-      console.log(price)
-      let total_2nd_gas = await get_buyProduct_gasFee(ticket_id, price, this.props.account_detail.wallet_accounts[0])
-
-      this.props.dispatch(updateSingle2ndGasFee(total_2nd_gas._hex))
-    } else {
-      this.props.dispatch(updateSingle2ndGasFee("0"))
-    }
   }
 
   async get_event_detail(event_id) {
