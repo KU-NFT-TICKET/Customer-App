@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.7+commit.e28d00a7"
+		"version": "0.8.18+commit.87f61d96"
 	},
 	"language": "Solidity",
 	"output": {
@@ -215,83 +215,9 @@
 						"internalType": "address",
 						"name": "owner",
 						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "dateSell",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "newProduct",
-						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_EventID",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "_EventName",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_dateEvent",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "_zone",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "_seat",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_priceSeat",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_priceGas",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_limit",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "_metadata",
-						"type": "string"
-					},
-					{
-						"internalType": "address",
-						"name": "_sender",
-						"type": "address"
-					}
-				],
-				"name": "MintTicket",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -322,6 +248,25 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "_productID",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
 						"name": "_ticketId",
 						"type": "uint256"
 					},
@@ -334,39 +279,10 @@
 						"internalType": "uint256",
 						"name": "_gas",
 						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_dateSell",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "_newProduct",
-						"type": "bool"
 					}
 				],
 				"name": "addProduct",
 				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_ticketId",
-						"type": "uint256"
-					}
-				],
-				"name": "addholdProduct",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -411,17 +327,7 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_EventID",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
 						"name": "_ticketId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_dateBuy",
 						"type": "uint256"
 					}
 				],
@@ -495,6 +401,11 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
+						"name": "_TicketID",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
 						"name": "_EventID",
 						"type": "uint256"
 					},
@@ -504,14 +415,9 @@
 						"type": "string"
 					},
 					{
-						"internalType": "uint256",
-						"name": "_dateEvent",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_dateSell",
-						"type": "uint256"
+						"internalType": "uint256[]",
+						"name": "_date",
+						"type": "uint256[]"
 					},
 					{
 						"internalType": "string",
@@ -530,21 +436,26 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "_priceGas",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "__limit",
+						"name": "_limit",
 						"type": "uint256"
 					},
 					{
 						"internalType": "string",
 						"name": "_metadata",
 						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "_owner",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "_isHold",
+						"type": "bool"
 					}
 				],
-				"name": "create_sell",
+				"name": "createTicket",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -552,7 +463,7 @@
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "nonpayable",
+				"stateMutability": "payable",
 				"type": "function"
 			},
 			{
@@ -700,16 +611,6 @@
 								"type": "uint256"
 							},
 							{
-								"internalType": "bool",
-								"name": "IsUse",
-								"type": "bool"
-							},
-							{
-								"internalType": "uint256",
-								"name": "limit",
-								"type": "uint256"
-							},
-							{
 								"internalType": "string",
 								"name": "metadata",
 								"type": "string"
@@ -718,25 +619,6 @@
 						"internalType": "struct TicketNFT.ticket",
 						"name": "",
 						"type": "tuple"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "hasBeenHold",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -831,6 +713,25 @@
 						"internalType": "address",
 						"name": "",
 						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "products",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -993,16 +894,6 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "bool",
-						"name": "IsUse",
-						"type": "bool"
-					},
-					{
-						"internalType": "uint256",
-						"name": "limit",
-						"type": "uint256"
-					},
-					{
 						"internalType": "string",
 						"name": "metadata",
 						"type": "string"
@@ -1052,65 +943,20 @@
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_ticketId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "_receive",
-						"type": "address"
-					}
-				],
-				"name": "transferHoldProduct",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_ticketId",
-						"type": "uint256"
-					}
-				],
-				"name": "unHoldProduct",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_tokenId",
-						"type": "uint256"
-					}
-				],
-				"name": "useTicket",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "nonpayable",
-				"type": "function"
 			}
 		],
 		"devdoc": {
+			"events": {
+				"Approval(address,address,uint256)": {
+					"details": "Emitted when `owner` enables `approved` to manage the `tokenId` token."
+				},
+				"ApprovalForAll(address,address,bool)": {
+					"details": "Emitted when `owner` enables or disables (`approved`) `operator` to manage all of its assets."
+				},
+				"Transfer(address,address,uint256)": {
+					"details": "Emitted when `tokenId` token is transferred from `from` to `to`."
+				}
+			},
 			"kind": "dev",
 			"methods": {
 				"approve(address,uint256)": {
@@ -1163,9 +1009,9 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"nft_ticket_v1/MarketPlace.sol": "TicketMarketplace"
+			"TicketMaketPlace.sol": "TicketMarketplace"
 		},
-		"evmVersion": "london",
+		"evmVersion": "paris",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -1233,14 +1079,6 @@
 				"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3"
 			]
 		},
-		"@openzeppelin/contracts/utils/Counters.sol": {
-			"keccak256": "0xf0018c2440fbe238dd3a8732fa8e17a0f9dce84d31451dc8a32f6d62b349c9f1",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://59e1c62884d55b70f3ae5432b44bb3166ad71ae3acd19c57ab6ddc3c87c325ee",
-				"dweb:/ipfs/QmezuXg5GK5oeA4F91EZhozBFekhq5TD966bHPH18cCqhu"
-			]
-		},
 		"@openzeppelin/contracts/utils/Strings.sol": {
 			"keccak256": "0xaf159a8b1923ad2a26d516089bceca9bdeaeacd04be50983ea00ba63070f08a3",
 			"license": "MIT",
@@ -1273,20 +1111,20 @@
 				"dweb:/ipfs/QmQJquTMtc6fgm5JQzGdsGpA2fqBe3MHWEdt2qzaLySMdN"
 			]
 		},
-		"nft_ticket_v1/MarketPlace.sol": {
-			"keccak256": "0x787c6248f6813d40bbb688053d594479cea0fcc1f5769e0aaa8133a8f8a4e827",
+		"TicketMaketPlace.sol": {
+			"keccak256": "0x3f1e2e9e877f1e971e660d4582efd15ecd2fc6f9a80f0421fc18ec4f16ca60b2",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://79ed902804cb0401a6c3396ddd69ff65f98957d7142a637e68bd615252442c44",
-				"dweb:/ipfs/QmTmws1nNzuWPfvBF3iyXASbQdQig27LUDAiiZUZnpir7e"
+				"bzz-raw://cf32f5d3f4e4e7970af0d863a41ee8d57980eae52a826c5a67154019d5d8500b",
+				"dweb:/ipfs/QmQMQSG8TpRcedymeU6d3Z6CeJD3dfPNjqpZXX1ujUpARK"
 			]
 		},
-		"nft_ticket_v1/TicketNFT.sol": {
-			"keccak256": "0x49f92fbffe5ed90c61a5a8ac0189440dce8c0661468983172a22a721afce8f6f",
+		"TicketNFT.sol": {
+			"keccak256": "0xeb99a481b8daf7e400254e65096b259fee6319ae06651395b372f909c6a03b35",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://d7672b6f5e5e45bd83c007e74e912ca58411a7ff4452236034544364f63b4a07",
-				"dweb:/ipfs/QmQoA5aFViTx5tYGutNRxDsc4ZNJUhwnqKwrRb85TzAaKu"
+				"bzz-raw://0be5d2374e57e5c1b5d4ad5307de7f6935f2fa5ee033327244ac216e49e8f611",
+				"dweb:/ipfs/QmYCL9iz5QLvnS6M4sxDTiFpK9WcdAobFqu356a2otJpco"
 			]
 		}
 	},

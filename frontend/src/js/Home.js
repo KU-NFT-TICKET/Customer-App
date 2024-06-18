@@ -7,12 +7,21 @@ import { AlexaForBusiness } from "aws-sdk";
 import axios from "axios"
 import { connect } from "react-redux";
 
-axios.defaults.headers.common['Authorization'] = process.env.REACT_APP_API_TOKEN
+// axios.defaults.headers.common['Authorization'] = process.env.REACT_APP_API_TOKEN
+axios.defaults.headers.common['Authorization'] = 'Basic '+ Buffer.from(process.env.REACT_APP_API_TOKEN).toString('base64');
 
 class Home extends React.Component {
 
   componentDidMount() {
-    this.onConnected()
+    this.setState({
+      is_mount: true,
+    })
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.is_mount !== this.state.is_mount) {
+      this.onConnected()
+    }
   }
 
   constructor() {
@@ -21,7 +30,8 @@ class Home extends React.Component {
     this.state = {
       isConnected: false,
       ownEvent: null,
-      htmlListEvent: null
+      htmlListEvent: null,
+      is_mount: false
     }
     this.onConnected = this.onConnected.bind(this)
     this.setListEvent = this.setListEvent.bind(this)
@@ -31,9 +41,10 @@ class Home extends React.Component {
 
   async onConnected() {
     // Use the MetaMask wallet as ethers provider
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    await provider.send("eth_requestAccounts", []);
-    const accounts = await provider.listAccounts();
+    // const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // await provider.send("eth_requestAccounts", []);
+    // const accounts = await provider.listAccounts();
+    const accounts = this.props.account_detail.wallet_accounts;
     // console.log(accounts[0])
     
     var html = []
@@ -43,7 +54,7 @@ class Home extends React.Component {
       console.log(ownEvent)
       for (const data of ownEvent.data) {
         console.log(data)
-        let link = "/detail/"+data['event_id'];
+        let link = "/organizer/detail/"+data['event_id'];
         var url = "https://"+process.env.REACT_APP_S3_BUCKET+".s3."+process.env.REACT_APP_S3_REGION+".amazonaws.com/poster/"+data['event_id']+".png";
         html.push((
           <div className="col-sm-3" style={{margin: '0.5%'}}><div className="card card-style">
@@ -113,9 +124,7 @@ class Home extends React.Component {
     }
   }
   
-  componentDidUpdate(_, prevState) {
-    
-  }
+  
 
 }
  

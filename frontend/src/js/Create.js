@@ -25,7 +25,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 var hash = require('object-hash');
 
-axios.defaults.headers.common['Authorization'] = process.env.REACT_APP_API_TOKEN
+// axios.defaults.headers.common['Authorization'] = process.env.REACT_APP_API_TOKEN
 
 class Create extends React.Component {
   constructor() {
@@ -115,7 +115,6 @@ class Create extends React.Component {
             // var putItem = {data: {insertId: 10}}
             if (putItem.data.insertId !== undefined) {
               var putPoster = uploadPic(bfP, putItem.data.insertId+'.png', 'poster');
-              console.log("putPoster: ");
               console.log(putPoster);
               var putSeat = uploadPic(bfS, putItem.data.insertId+'.png', '');
               console.log(putSeat);

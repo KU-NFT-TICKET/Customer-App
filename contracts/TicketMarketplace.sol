@@ -15,7 +15,7 @@ contract TicketMarketplace is TicketNFT {
 
     struct boughtProduct {
         uint price;
-		uint gas;
+        uint gas;
     }
 
     // Mapping for list product

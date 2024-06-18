@@ -5,8 +5,7 @@ import Swal from 'sweetalert2'
 import { connect } from "react-redux";
 import 'bootstrap/dist/js/bootstrap.bundle';
 import axios from "axios"
-import { check_format_thaiID, encode_thaiID, decode_thaiID } from '../features/function'
-
+import { check_format_thaiID, encode_thaiID, decode_thaiID } from '../../features/function'
 
 export class SignupForm extends React.Component {
   constructor () {
@@ -19,8 +18,7 @@ export class SignupForm extends React.Component {
   }
 
   async check_available_thaiID(thai_id) {
-    var q = {query: "select * from Accounts"}
-    const thai_id_rst = await axios.post("http://localhost:8800/select", q)
+    const thai_id_rst = await axios.get(process.env.REACT_APP_API_BASE_URL+"/accounts/all")
     console.log("find_thai_id")
     console.log(thai_id_rst)
 
@@ -34,27 +32,11 @@ export class SignupForm extends React.Component {
   }
 
   async check_available_username(username) {
-    var q = {query: "select * from Accounts ;where username = ?", 
-    bind: [username]}
-    const username_q_rst = await axios.post("http://localhost:8800/select", q)
+    const username_q_rst = await axios.get(process.env.REACT_APP_API_BASE_URL+"/account?username="+username)
     console.log("check_username")
     console.log(username_q_rst)
 
     if (username_q_rst.data.length > 0) {
-      return true
-    } else {
-      return false
-    }
-  }
-
-  async check_available_email(email) {
-    var q = {query: "select * from Accounts where email = ?", 
-    bind: [email]}
-    const email_q_rst = await axios.post("http://localhost:8800/select", q)
-    console.log("check_email")
-    console.log(email_q_rst)
-
-    if (email_q_rst.data.length > 0) {
       return true
     } else {
       return false
@@ -125,65 +107,28 @@ export class SignupForm extends React.Component {
           $(".signup-form[name=username]").removeClass("input-error");
         } 
 
-        // check thai
-        // var q = {query: "select CAST(AES_DECRYPT(thai_id, address) AS CHAR) as thai_id, address from Accounts where username = 'OCarolZ'"}
-        // const testquery = await axios.post("http://localhost:8800/select", q);
-        // var encrypted_thai_id = testquery.data[0]['thai_id']
+        // check thai_id
         var encrypted_thai_id = encode_thaiID(signup_thaiID, this.props.account_detail.wallet_accounts[0])
         if (signup_thaiID === "") {
           $(".signup-form[name=thai_id]").addClass("input-error");
           console.log("null thai_id.")
-          // Swal.showValidationMessage(
-          //   '<i class="fa fa-info-circle"></i> Citizen ID cannot be null' 
-          // )
           error_msg.push("Citizen ID cannot be null");
-          // flag += 1
         } else if (!check_format_thaiID(signup_thaiID)) {
           $(".signup-form[name=thai_id]").addClass("input-error");
           console.log("wrong thai_id form.")
-          // Swal.showValidationMessage(
-          //   '<i class="fa fa-info-circle"></i> Citizen ID wrong format.'
-          // )
           error_msg.push("Citizen ID wrong format.");
-          // flag += 1
         } else {
           var check_thaiID_rst = await this.check_available_thaiID(signup_thaiID)
           if (check_thaiID_rst) {
             console.log("registered thai_id.")
-            // Swal.showValidationMessage(
-            // '<i class="fa fa-info-circle"></i><span> Citizen ID: ' + signup_thaiID + ' is already used!</span>'
-            // )
             error_msg.push("Citizen ID: " + signup_thaiID + " is already used!");
             $(".signup-form[name=thai_id]").addClass("input-error");
-            // flag += 1
           } else {
             signup_dict["thai_id"] = signup_thaiID
             $(".signup-form[name=thai_id]").removeClass("input-error");
           }
         }
         console.log(error_msg.length)
-
-        // check email
-        // if (signup_email === "") {
-        //   $(".signup-form[name=email]").addClass("input-error");
-        //   console.log("null email.")
-        //   flag += 1
-        // } else if (!/\S+@\S+\.\S+/.test(signup_email)) {
-        //   $(".signup-form[name=email]").addClass("input-error");
-        //   console.log("wrong email form.")
-        //   flag += 1
-        // } else {
-        //   var check_email_rst = await this.check_available_email(signup_email)
-        //   if (check_email_rst) {
-        //     console.log("registered email.")
-        //     $(".signup-form[name=email]").addClass("input-error");
-        //     flag += 1
-        //   } else {
-        //     signup_dict["email"] = signup_email
-        // $(".signup-form[name=email]").removeClass("input-error");
-        //   }
-        // }
-        // console.log(error_msg.length)
         
         //return
         console.log("flag: " , error_msg.length)
@@ -191,11 +136,12 @@ export class SignupForm extends React.Component {
           console.time('insert new account.');
           var cipher_thaiID = encode_thaiID(signup_dict["thai_id"], this.props.account_detail.wallet_accounts[0])
           console.log("encode_thai_id: ", cipher_thaiID)
-          var q = {query: "insert into Accounts (Address, username, thai_id) values (?, ?, ?)", 
-          bind: [this.props.account_detail.wallet_accounts[0], signup_dict["username"], cipher_thaiID]}
-          var insertItem = await axios.post("http://localhost:8800/insert", q);
+          var insertItem = await axios.post(process.env.REACT_APP_API_BASE_URL+"/account", {
+            address: this.props.account_detail.wallet_accounts[0],
+            username: signup_dict["username"],
+            thai_id: cipher_thaiID
+          });
           console.log(insertItem);
-          // var putItem = {data: {insertId: 10}}
           if (insertItem.data.affectedRows !== undefined) {
             console.timeEnd('insert Account')
             return {err: 0, msg: "insert success"}
@@ -227,7 +173,6 @@ export class SignupForm extends React.Component {
     if (formValues !== null) {
       console.log("final fire");
       
-      // document.getElementById("phone").onkeyup = checkPhone;
       Swal.fire(JSON.stringify(formValues))
     } 
   }
@@ -241,24 +186,11 @@ export class SignupForm extends React.Component {
 
 
    render () {
-   	const account_style = {
-        color: 'white',
-        border: '1px solid white',
-        borderRadius: '10px',
-        padding: '10px',
-        margin: '10px'
-      };
-    const account_shown = this.props.account_detail.wallet_accounts[0].substring(0, 6) + "..." + this.props.account_detail.wallet_accounts[0].slice(-6)
-   	return (
-		<div>
-          <button type="button" onClick={this.handleLoginClick} className="btn btn-primary" >
-		   Sign Up
-		  </button>
-          <div style={account_style}>
-          	Account: {account_shown}
-          </div>
-        </div>
-	)
+    return (
+      <button type="button" onClick={this.handleLoginClick} className="btn btn-primary signup-btn" >
+      Sign Up
+      </button>
+    )
   }
 }
 

@@ -6,19 +6,31 @@ import axios from "axios"
 import Swal from 'sweetalert2'
 import CryptoJS from 'crypto-js'
 import { connect } from "react-redux";
-import { changeWalletAccount, changeChainId, checkMetaMaskInstalled, setMMInstalledFlag, setConnectFlag, setLoginFlag, setUsername, setThaiID } from '../features/account/accountSlicer';
-import { decode_thaiID } from '../features/function'
+import { 
+  changeWalletAccount, 
+  changeChainId, 
+  checkMetaMaskInstalled, 
+  setMMInstalledFlag, 
+  setConnectFlag, 
+  setLoginFlag, 
+  setUsername, 
+  setThaiID 
+} from '../../features/account/accountSlice';
+import { decode_thaiID } from '../../features/function'
 import 'bootstrap/dist/js/bootstrap.bundle';
 import SignupForm from './SignupForm'
 import AccountTab from './AccountTab'
 
+// axios.defaults.headers.common['Authorization'] = process.env.REACT_APP_API_TOKEN
+axios.defaults.headers.common['Authorization'] = 'Basic '+ Buffer.from(process.env.REACT_APP_API_TOKEN).toString('base64');
 
 class OnboardingButton extends React.Component {
   constructor () {
     super()
 
     this.state = {
-      onboarding: new MetaMaskOnboarding()
+      onboarding: new MetaMaskOnboarding(),
+      is_mount: false,
     }
 
     this.connectMetaMask = this.connectMetaMask.bind(this)
@@ -27,9 +39,7 @@ class OnboardingButton extends React.Component {
   }
 
   async check_available_walletaddress(address) {
-    var q = {query: "select * from Accounts where address = ?", 
-    bind: [address]}
-    const address_q_rst = await axios.post("http://localhost:8800/select", q)
+    const address_q_rst = await axios.get(process.env.REACT_APP_API_BASE_URL+"/account/"+address)
     console.log("check_address")
     console.log(address_q_rst)
 
@@ -37,52 +47,62 @@ class OnboardingButton extends React.Component {
       this.props.dispatch(setLoginFlag(true))
       this.props.dispatch(setUsername(address_q_rst.data[0]['username']))
       this.props.dispatch(setThaiID(address_q_rst.data[0]["thai_id"]))
-      return true
+      // window.location.reload()
     } else {
       this.props.dispatch(setLoginFlag(false))
-      return false
     }
   }
 
   componentDidMount () {
-    console.log("(DidMount)")
-    // console.log(this.props.account_detail.MetaMaskIsInstalled)
-    if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-      this.props.dispatch(setMMInstalledFlag(true))
-      this.connectMetaMask()
+    this.setState({
+      is_mount: true
+    });
 
-      // chain
-      const chainId = window.ethereum.networkVersion
-      this.props.dispatch(changeChainId(chainId))
-
-      // Reload the site if the user selects a different chain
-      window.ethereum.on('chainChanged', (chainId) => {
-        this.props.dispatch(changeChainId(chainId))
-        // window.location.reload()
-      })  
-
-      // Set the chain id once the MetaMask wallet is connected
-      window.ethereum.on('connect', (connectInfo) => {
-        const chainId = connectInfo.chainId
-        this.props.dispatch(changeChainId(chainId))
-      })
-
-      // Update the list of accounts if the user switches accounts in MetaMask
-      console.log("get accounts!! (DidMount)")
-      window.ethereum.on('accountsChanged', accounts => {
-        console.log("account did mount")
-        this.props.dispatch(changeWalletAccount(accounts))
-        if (accounts.length > 0) {
-          this.check_available_walletaddress(accounts[0])
-        }
-      })
-
-    } else {
-      this.props.dispatch(setMMInstalledFlag(false))
-    }
+    
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (prevState.is_mount !== this.state.is_mount) {
+      // componentDidMount
+      if (MetaMaskOnboarding.isMetaMaskInstalled()) {
+        this.props.dispatch(setMMInstalledFlag(true))
+        this.connectMetaMask()
+
+        // chain
+        window.ethereum.request({method: 'net_version'}).then(chainId => {
+          this.props.dispatch(changeChainId(chainId))
+          console.log("net_version")
+        })
+
+        // Reload the site if the user selects a different chain
+        window.ethereum.on('chainChanged', (chainId) => {
+          this.props.dispatch(changeChainId(chainId))
+          console.log("chainChanged")
+          // window.location.reload()
+        })  
+
+        // Set the chain id once the MetaMask wallet is connected
+        window.ethereum.on('connect', (connectInfo) => {
+          const chainId = connectInfo.chainId
+          this.props.dispatch(changeChainId(chainId))
+          console.log("connect")
+        })
+
+        // Update the list of accounts if the user switches accounts in MetaMask
+        window.ethereum.on('accountsChanged', accounts => {
+          console.log("account did mount")
+          if (accounts.length > 0 && this.props.account_detail.wallet_accounts[0] !== accounts[0]) {
+            this.check_available_walletaddress(accounts[0])
+          }
+          this.props.dispatch(changeWalletAccount(accounts))
+        })
+
+      } else {
+        this.props.dispatch(setMMInstalledFlag(false))
+      }
+    }
+
+
     if (prevState.isShowLogin !== this.state.isShowLogin) {
       console.log('isShowLogin state has changed to ', this.state.isShowLogin.toString())
     }
@@ -121,7 +141,6 @@ class OnboardingButton extends React.Component {
 
 
   render () {
-    console.log("get accounts!! (Render)")
     if (this.props.account_detail.MetaMaskIsInstalled) {
       if (this.props.account_detail.wallet_accounts.length > 0) {
         // If the user is connected to MetaMask, stop the onboarding process.
@@ -165,9 +184,7 @@ class OnboardingButton extends React.Component {
       )
     } else if (this.props.account_detail.isLogin) {
       return (
-        <div>
-          <AccountTab />
-        </div>
+        <AccountTab />
       )
     } else {
       // The user is connected to the MetaMask wallet and has the Avalanche chain selected.

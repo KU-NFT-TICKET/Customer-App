@@ -35,7 +35,6 @@ const AVALANCHE_NETWORK_PARAMS = AVALANCHE_TESTNET_PARAMS
 export const accountSlice = createSlice({
   name: 'account',
   initialState: {
-    value: 0,
     isConnected: false,
     wallet_accounts: [],
     chainId: null,
@@ -45,22 +44,10 @@ export const accountSlice = createSlice({
     isLogin: false,
     username: null,
     thai_id: "",
-    
+    account_list: {},
+    timezone: "Asia/Bangkok",
   },
   reducers: {
-    increment: state => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1
-    },
-    decrement: state => {
-      state.value -= 1
-    },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload
-    },
     changeWalletAccount: (state, action) => {
       state.wallet_accounts = action.payload
     },
@@ -93,15 +80,22 @@ export const accountSlice = createSlice({
     },
     setThaiID: (state, action) => {
       state.thai_id = action.payload
-    }
+    },
+    updateAccountList: (state, action) => {
+      let account_list = state.account_list
+      for (let address in action.payload) {
+        account_list[address] = action.payload[address]
+      }
+      state.account_list = account_list
+    },
+    updateTimeZone: (state, action) => {
+      state.timezone = action.payload
+    },
   }
 })
 
 // Action creators are generated for each case reducer function
 export const { 
-  increment, 
-  decrement, 
-  incrementByAmount, 
   changeWalletAccount, 
   changeChainId, 
   checkMetaMaskInstalled, 
@@ -109,7 +103,9 @@ export const {
   setConnectFlag, 
   setLoginFlag, 
   setUsername,
-  setThaiID
+  setThaiID,
+  updateAccountList,
+  updateTimeZone,
 } = accountSlice.actions
 
 export default accountSlice.reducer
