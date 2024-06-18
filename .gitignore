@@ -2,7 +2,7 @@
 
 # dependencies
 node_modules
-img
+# img
 diff
 /.pnp
 .pnp.js
