@@ -39,6 +39,7 @@ export class Events extends React.Component {
   }
 
   componentDidMount() {
+    console.log("events page did mount.")
     this.setState({
       is_mount: true,
       // loading: true,
