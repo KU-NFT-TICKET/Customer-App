@@ -70,7 +70,7 @@ class ZoneDetail_V2 extends React.Component {
 
   async get_orders_detail(event_id) {
     const my_event_orders = await axios.get(process.env.REACT_APP_API_BASE_URL+"/orders?event_id=" + event_id + "&buyer=" + this.props.account_detail.wallet_accounts[0] 
-      + "&is_intime=true"
+      + "&is_intime=true&is_removed=false"
     )
 
     let this_zone = ""
@@ -602,7 +602,8 @@ class ZoneDetail_V2 extends React.Component {
   render () {
     let zone_price = BigNumber.from(this.props.purchase.zoneAvailability[this.props.selectedZone]['price'])
     let zone_price_fee = BigNumber.from(this.props.purchase.single_gas_fee)
-    let total_zone_price = zone_price.add(zone_price_fee)
+    // let total_zone_price = zone_price.add(zone_price_fee)
+    let total_zone_price = zone_price
     let shown_zone_price = ethers.utils.formatEther(total_zone_price)
 
     if (this.state.show_resale) {
