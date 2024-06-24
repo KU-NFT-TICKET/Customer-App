@@ -77,47 +77,39 @@ class Event_Detail extends React.Component {
         console.log(err)
       }
     }
-    
-    // data_detail = {
-    //   'event_id': data_detail.event_id,
-    //   'event_name': data_detail.event_name,
-    //   'date_sell': data_detail.date_sell,
-    //   'date_event': data_detail.date_event,
-    //   'show_date_sell': formatInTimeZone(new Date(data_detail.date_sell), this.props.account_detail.timezone, 'iiii d MMMM yyyy HH:mm'),
-    //   'show_date_event': formatInTimeZone(new Date(data_detail.date_event), this.props.account_detail.timezone, 'iiii d MMMM yyyy'),
-    //   'show_time_event': formatInTimeZone(new Date(data_detail.date_event), this.props.account_detail.timezone, 'HH:mm'),
-    //   'detail': data_detail.detail,
-    //   'purchase_limit': data_detail.purchase_limit,
-    //   'venue': data_detail.venue
-    // }
 
-    var price_detail = []
+    let price_detail = []
     let seat_count = 0
     console.time("seat api");
     let get_seats_resp = await axios.get(process.env.REACT_APP_API_BASE_URL+"/events/" + this.props.event_id + "/seats")
     console.timeEnd("seat api");
     for (let seat_detail of get_seats_resp.data) {
-      if (this.props.purchase.single_gas_fee === "0" && seat_detail.transaction === null) {
-        let purchase_form = gen_purchase_form(
-          seat_detail, 
-          this.props.events.all_events[this.props.event_id], 
-          this.props.account_detail.wallet_accounts[0], 
-          this.props.account_detail.timezone
-        )
-        let total_gas = await get_createTicket_gasFee(purchase_form)
-        await this.props.dispatch(updateSingleGasFee(total_gas._hex))
-      }
+      // if (this.props.purchase.single_gas_fee === "0" && seat_detail.transaction === null) {
+      //   let purchase_form = gen_purchase_form(
+      //     seat_detail, 
+      //     this.props.events.all_events[this.props.event_id], 
+      //     process.env.REACT_APP_GETGAS_ACCOUNT, 
+      //     this.props.account_detail.timezone
+      //   )
+      //   let total_gas = await get_createTicket_gasFee(purchase_form)
+      //   await this.props.dispatch(updateSingleGasFee(total_gas._hex))
+      //   console.log(total_gas)
+      // }
 
-      if (this.props.purchase.single_2nd_gas_fee === "0" && seat_detail.in_marketplace !== null) {
-        let {price: resale_price} = await get_2ndHand_price(seat_detail.ticket_id)
-        console.log(resale_price)
-        let total_2nd_gas = await get_buyProduct_gasFee(seat_detail.ticket_id, resale_price._hex, this.props.account_detail.wallet_accounts[0])
-        await this.props.dispatch(updateSingle2ndGasFee(total_2nd_gas._hex))
-      }
+      // if (this.props.purchase.single_2nd_gas_fee === "0" && seat_detail.in_marketplace !== null) {
+      //   // let {price: resale_price} = await get_2ndHand_price(seat_detail.ticket_id)
+      //   // console.log(resale_price)
+      //   let total_2nd_gas = await get_buyProduct_gasFee(seat_detail.ticket_id, "0", process.env.REACT_APP_GETGAS_ACCOUNT)
+      //   await this.props.dispatch(updateSingle2ndGasFee(total_2nd_gas._hex))
+      // }
 
+      
       let seat_price = BigNumber.from(seat_detail.price)
-      let createTicket_fee = BigNumber.from(this.props.purchase.single_gas_fee)
-      let seat_eth_price = Math.round(ethers.utils.formatEther(seat_price.add(createTicket_fee)) * 1e2) / 1e2;
+      // let createTicket_fee = BigNumber.from(this.props.purchase.single_gas_fee)
+      // console.log(ethers.utils.formatEther(createTicket_fee))
+      // let seat_eth_price = Math.round(ethers.utils.formatEther(seat_price.add(createTicket_fee)) * 1e2) / 1e2;
+      let seat_eth_price = Math.round(ethers.utils.formatEther(seat_price) * 1e2) / 1e2;
+      console.log(seat_eth_price)
       if (seat_detail.owner === null) { seat_count += 1 }
       if (!price_detail.includes(seat_eth_price)) { price_detail.push(seat_eth_price) }
     }
@@ -127,29 +119,6 @@ class Event_Detail extends React.Component {
       price_detail: price_detail,
       seat_count: seat_count,
     })
-
-    // let seat_count = 0
-    // let price_detail = []
-    // try {
-    //   console.time("seat api");
-    //   let seats_of_event_recs = await axios.get(process.env.REACT_APP_API_BASE_URL+"/events/" + this.props.event_id + "/seats")
-    //   console.timeEnd("seat api");
-    //   for (let seat_detail of seats_of_event_recs.data) {
-    //     let seat_eth_price = Math.round(ethers.utils.formatEther(seat_detail.price) * 1e2) / 1e2;
-    //       if (seat_detail.owner === null) { seat_count += 1 }
-    //       if (!price_detail.includes(seat_eth_price)) { price_detail.push(seat_eth_price) }
-    //   }
-    //   price_detail.sort().reverse();
-
-    // } catch (err) {
-    //   console.log(err)
-    // }
-    // console.log(price_detail)
-
-    // this.setState({
-    //   price_detail: price_detail,
-    //   seat_count: seat_count,
-    // })
 
     this.setLoading(false)
   }
