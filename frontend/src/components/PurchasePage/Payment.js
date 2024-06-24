@@ -8,7 +8,7 @@ import { formatInTimeZone } from 'date-fns-tz';
 import Swal from 'sweetalert2'
 import withRouter from '../../js/withRouter';
 import axios from "axios"
-import {BrowserRouter as Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { compose } from "redux";
@@ -184,7 +184,7 @@ export class Payment extends React.Component {
 
         // post api cancel_order
         console.log("cancel order")
-        // this.props.cancel_order()
+        this.props.cancel_order()
 
         if (completed_count === 0) {
           // this.props.navigate('/event/' + this.prop.purchase.event_id)
