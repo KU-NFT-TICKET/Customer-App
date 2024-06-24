@@ -48,7 +48,7 @@ export class SignupForm extends React.Component {
       title: 'Sign Up',
       html: '<form style="text-align: left;">                                                                                            ' +
 '  <div class="mb-3">                                                                              ' +
-'    <label for="exampleInputAddress1" class="form-label">Address: <span class="metamask-address">' + this.props.account_detail.wallet_accounts[0] + '<span></label>                        ' +
+'    <label for="exampleInputAddress1" class="form-label">Wallet Address: <span class="metamask-address">' + this.props.account_detail.wallet_accounts[0] + '<span></label>                        ' +
 // '    <input type="text" class="form-control signup-form" id="signUpAddress" name="Address" >                       ' +
 '  </div>                                                                                          ' +
 '  <div class="mb-3">                                                                              ' +
