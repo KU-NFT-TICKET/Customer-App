@@ -44,16 +44,19 @@ class MainNavBar extends React.Component {
                 <NavLink to="/events" className="nav-link">Events</NavLink>
                 </li>
                 <li className="nav-item">
-                <NavLink to="/buy_test" className="nav-link">Buy Test</NavLink>
+                <NavLink to="/account/tickets" className="nav-link">My Tickets</NavLink>
                 </li>
+                {/* <li className="nav-item">
+                <NavLink to="/buy_test" className="nav-link">Buy Test</NavLink>
+                </li> */}
                 {/*<li className="nav-item">
                 <NavLink to="/" className="nav-link">Organizer →</NavLink>
                 </li>*/}
               </ul>
-              <form className="d-flex px-3"> 
+              {/* <form className="d-flex px-3"> 
                 <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
                 <button className="btn btn-outline-warning" type="submit">Search</button>
-              </form>
+              </form> */}
             </div>
             <div className="px-2 noti-btn">
               <FontAwesomeIcon icon={faBell} style={{ height: '1.25em'}} />
