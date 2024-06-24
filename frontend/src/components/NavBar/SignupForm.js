@@ -187,8 +187,9 @@ export class SignupForm extends React.Component {
 
    render () {
     return (
-      <button type="button" onClick={this.handleLoginClick} className="btn btn-primary signup-btn" >
-      Sign Up
+      <button type="button" onClick={this.handleLoginClick} className="btn btn-primary signup-btn d-inline-flex align-items-center" >
+      <span>Sign In</span>
+      <img src={require('../../img/metamask-icon.png')} className="ms-1" style={{width: "1.2em", height: "1.2em"}} alt="Metamask" />
       </button>
     )
   }
