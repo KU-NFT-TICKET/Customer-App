@@ -54,8 +54,10 @@ import {
 import contractTicketPlace from '../contracts/TicketMarketplace.json'
 import ZoneAvailabilityBox from '../components/PurchasePage/ZoneAvailabilityBox'
 import ZoneDetail from '../components/PurchasePage/ZoneDetail'
+import { AuthenticationContext } from '../contexts/AuthenticationContext'
 
 export class Seating extends React.Component {
+  static contextType = AuthenticationContext;
   constructor(props) {
     super(props)
 
@@ -355,7 +357,15 @@ export class Seating extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.is_mount !== this.state.is_mount && this.state.is_mount) {
-      this.onConnected()
+      if (this.props.account_detail.isLogin) {
+        this.onConnected()
+      } else {
+        const { connectWallet } = this.context;
+        connectWallet(
+          ()=>{this.onConnected()},
+          ()=>{this.props.navigate(-1)},
+        )
+      }
     }
   }
 
@@ -433,7 +443,11 @@ export class Seating extends React.Component {
           </div>
         )
       } else {
-        return <img src={require('../img/loading.gif')} />
+        return (
+          <div className="head-spacer">
+            <img className="loading-black" style={{width: '2em', 'height': '2em'}} />
+          </div>
+        )
       }
     } else {
       return (

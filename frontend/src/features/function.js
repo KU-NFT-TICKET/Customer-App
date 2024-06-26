@@ -1,4 +1,5 @@
 import CryptoJS from 'crypto-js'
+import axios from 'axios';
 import { BigNumber, ethers } from 'ethers'
 // import format from 'date-fns/format';
 import { formatInTimeZone } from 'date-fns-tz';
@@ -117,6 +118,51 @@ export function is_ticket_available(ticket_detail, include_2ndHandTicket = false
 		}
 	}
 	return is_available;
+}
+
+export async function check_available_thaiID(thai_id) {
+    const thai_id_rst = await axios.get(process.env.REACT_APP_API_BASE_URL+"/accounts/all")
+    console.log("find_thai_id")
+    console.log(thai_id_rst)
+
+    var decrypted_thaiID = [];
+    for (const data of thai_id_rst.data) {
+      var thai_id_row = decode_thaiID(data['thai_id'], data['Address'])
+      decrypted_thaiID.push(thai_id_row);
+    }
+    var id_flag = decrypted_thaiID.includes(thai_id)
+    return id_flag
+}
+
+export async function check_available_username(username) {
+    const username_q_rst = await axios.get(process.env.REACT_APP_API_BASE_URL+"/account?username="+username)
+    console.log("check_username")
+    console.log(username_q_rst)
+
+    if (username_q_rst.data.length > 0) {
+      return true
+    } else {
+      return false
+    }
+}
+
+export async function check_available_walletaddress(address) {
+	const address_q_rst = await axios.get(process.env.REACT_APP_API_BASE_URL+"/account/"+address)
+	console.log("check_address")
+	console.log(address_q_rst)
+
+	let is_existed = false
+	let username = ""
+	let thai_id = ""
+
+	if (address_q_rst.data.length > 0) {
+		is_existed = true
+		username = address_q_rst.data[0]['username']
+		thai_id = address_q_rst.data[0]["thai_id"]
+	} else {
+		is_existed = false
+	}
+	return {is_existed, username, thai_id}
 }
 
 export function is_beside_ticket(selected_seat_detail, current_seat_row, current_min_seat_id, current_max_seat_id) {
@@ -553,3 +599,5 @@ export async function get_gasFee_from_trx(trx) {
 
 	return gasFee;
 }
+
+///////////// global popup //////////////////

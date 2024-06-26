@@ -18,7 +18,7 @@ import {
 } from '../../features/account/accountSlice';
 import { decode_thaiID } from '../../features/function'
 import 'bootstrap/dist/js/bootstrap.bundle';
-import SignupForm from './SignupForm'
+// import SignupForm from './SignupForm'
 import AccountTab from './AccountTab'
 
 // axios.defaults.headers.common['Authorization'] = process.env.REACT_APP_API_TOKEN
@@ -190,7 +190,7 @@ class OnboardingButton extends React.Component {
       // The user is connected to the MetaMask wallet and has the Avalanche chain selected.
       return (
         <div>
-          <SignupForm />
+          {/* <SignupForm /> */}
         </div>
       )
     }

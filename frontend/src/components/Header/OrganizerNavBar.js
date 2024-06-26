@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-solid-svg-icons'
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
-import SignupForm from '../NavBar/SignupForm'
 import AccountTab from '../NavBar/AccountTab'
 
 class OrganizerNavBar extends React.Component {
@@ -64,7 +63,10 @@ class OrganizerNavBar extends React.Component {
                 (this.props.account_detail.isLogin) ? (
                   <AccountTab />
                 ) : (
-                  <SignupForm />
+                  <button type="button" onClick={this.connectWalletHandler} className="btn btn-primary signup-btn d-inline-flex align-items-center" >
+                    <span>Connect Wallet</span>
+                    {/* <img src={require('../../img/metamask-icon.png')} className="ms-1" style={{width: "1.2em", height: "1.2em"}} alt="Metamask" /> */}
+                  </button>
                 )
               }
             </div>

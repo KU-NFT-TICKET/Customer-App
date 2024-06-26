@@ -18,6 +18,7 @@ import {
   addProduct,
   cancelProduct,
   get_addProduct_gasFee,
+  get_2ndHand_price,
   get_cancelProduct_gasFee,
 } from '../../../features/function'
 import { updateAllEvents } from '../../../features/events/eventSlice';
@@ -285,6 +286,7 @@ class TicketDetail extends React.Component {
       ticket_detail["ticket_status"] = ticket_status
 
       let fee = BigNumber.from(0)
+      let market_price = 0
       if (ticket_status === "active") {
         fee = await get_addProduct_gasFee(
           this.props.ticket_id, 
@@ -297,7 +299,11 @@ class TicketDetail extends React.Component {
           this.props.ticket_id,
           this.props.account_detail.wallet_accounts[0]
         )
+        let {price: this_price} = await get_2ndHand_price(this.props.ticket_id)
+        market_price = this_price
       }
+      ticket_detail["market_price"] = market_price
+
       
 
       this.setState({
@@ -340,6 +346,7 @@ class TicketDetail extends React.Component {
       let show_datetime_event = formatInTimeZone(new Date(event_detail.date_sell), this.props.account_detail.timezone, 'iiii d MMMM yyyy, HH:mm')
       let seat_id = this.state.ticket_detail.seat_row + this.state.ticket_detail.seat_id
       let price = this.state.ticket_detail.price
+      let market_price = this.state.ticket_detail.market_price
       let ticket_status = this.state.ticket_detail.ticket_status
       let imgurl = "https://"+process.env.REACT_APP_S3_BUCKET+".s3."+process.env.REACT_APP_S3_REGION+".amazonaws.com/poster/" + event_detail.event_id + ".png"
       let snowtrace_link = "https://testnet.snowtrace.io/nft/"+ process.env.REACT_APP_TICKET_ADDRESS +"/"+ this.props.ticket_id +"?chainId=43113"
@@ -421,10 +428,33 @@ class TicketDetail extends React.Component {
                                 <div className="col">
 
                                 </div>
-                                <div className="col-sm-2">
-                                    <span className="label">Price</span>
-                                    <span className="ms-2 value">{ethers.utils.formatEther(price)}</span>
-                                </div>
+                                {
+                                  (ticket_status === "on-sale") ? (
+                                    <div className="col-sm-2">
+                                      <div className="row align-items-center">
+                                        <div className="col-6 p-0 text-start">
+                                          <span className="label">Your Price</span>
+                                        </div>
+                                        <div className="col-6 p-0 text-start">
+                                          <span className="ms-2 value">{ethers.utils.formatEther(market_price)}</span>
+                                        </div>
+                                      </div>
+                                      <div className="row align-items-center">
+                                        <div className="col-6 p-0 text-start">
+                                          <span className="ori-price">Original Price</span>
+                                        </div>
+                                        <div className="col-6 p-0">
+                                          <span className="ms-2 ori-price">{ethers.utils.formatEther(price)}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <div className="col-sm-2">
+                                      <span className="label">Price</span>
+                                      <span className="ms-2 value">{ethers.utils.formatEther(price)}</span>
+                                    </div>
+                                  )
+                                }
                                 <div className="col-sm-2">
                                     {
                                       (ticket_status === "on-sale") ? (

@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { ethers } from 'ethers'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 import MetaMaskOnboarding from '@metamask/onboarding'
 
 var dec_chainId = 43113
@@ -73,6 +75,7 @@ export const accountSlice = createSlice({
       state.isConnected = action.payload
     },
     setLoginFlag: (state, action) => {
+      console.log(action.payload)
       state.isLogin = action.payload
     },
     setUsername: (state, action) => {

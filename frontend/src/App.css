@@ -163,9 +163,38 @@ button.signup-btn {
   border: none;
 }
 
+button.signup-btn img {
+  width: 1.2em;
+  height: 1.2em;
+  -webkit-filter: drop-shadow(1px 1px 1px var(--gray-color));
+  filter: drop-shadow(1px 1px 1px var(--gray-color));
+}
+
 button.signup-btn:hover, button.signup-btn:focus, button.signup-btn:active {
   background-color: var(--accent-color);
   color: var(--base-color);
+}
+
+button.signup-btn:hover img, button.signup-btn:focus img, button.signup-btn:active img {
+  -webkit-filter: drop-shadow(1px 1px 1px var(--text-color));
+  filter: drop-shadow(1px 1px 1px var(--text-color));
+}
+
+button.connect-wallet-btn, button.connect-wallet-btn:focus {
+  color: var(--text-color);
+  height: 3em;
+  width: 100%;
+  background-color: white;
+  border: 1px solid var(--light-gray-color);
+  -webkit-filter: drop-shadow(1px 1px 1px var(--light-gray-color));
+  filter: drop-shadow(1px 2px 1px var(--light-gray-color));
+  overflow:hidden;
+}
+
+button.connect-wallet-btn:hover, button.connect-wallet-btn:active {
+  color: white;
+  background-color: var(--gray-color);
+  border: 1px solid var(--base-color);
 }
 
 .organizer-btn {
@@ -695,6 +724,12 @@ button.checkout-btn span {
 
 .ticket-box .seat-detail .label {
   color: var(--gray-color);
+  font-weight: 600;
+  font-size: 0.75em;
+}
+
+span.ori-price {
+  color: var(--light-gray-color);
   font-weight: 600;
   font-size: 0.75em;
 }

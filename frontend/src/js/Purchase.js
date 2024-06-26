@@ -58,11 +58,13 @@ import contractTicketPlace from '../contracts/TicketMarketplace.json'
 import Checkout from '../components/PurchasePage/Checkout'
 import Payment from '../components/PurchasePage/Payment'
 import Summary from '../components/PurchasePage/Summary'
+import { AuthenticationContext } from '../contexts/AuthenticationContext'
 
 // axios.defaults.headers.common['Authorization'] = process.env.REACT_APP_API_TOKEN
 // axios.defaults.headers.common['Authorization'] = 'Basic '+ Buffer.from(process.env.REACT_APP_API_TOKEN).toString('base64');
 
 export class Purchase extends React.Component {
+  static contextType = AuthenticationContext;
   constructor(props) {
     super(props)
 
@@ -302,9 +304,16 @@ export class Purchase extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (!prevState.is_mount && this.state.is_mount && this.props.account_detail.wallet_accounts.length > 0) {
-      console.log("order page is mount!")
-      this.onLoad()
+    if (prevState.is_mount !== this.state.is_mount && this.state.is_mount) {
+      if (this.props.account_detail.isLogin) {
+        this.onLoad()
+      } else {
+        const { connectWallet } = this.context;
+        connectWallet(
+          ()=>{this.onLoad()},
+          ()=>{this.props.navigate(-1)},
+        )
+      }
     }
   }
 

@@ -35,10 +35,12 @@ import Events from "./js/Events";
 import Event_Detail from "./js/Event_Detail";
 import Seating from "./js/Seating";
 import Purchase from "./js/Purchase";
+import Order from "./js/Order";
 import Buy_Test from "./js/Buy_Test";
 import Header from "./js/Header";
 import NotFoundPage from "./js/NotFoundPage";
 import Help from "./js/Help";
+import { AuthProvider } from './contexts/AuthenticationContext'
 
 // Import App components
 import OnboardingButton from './components/NavBar/Onboarding'
@@ -50,110 +52,20 @@ class App extends React.Component {
     super()
 
     this.state = {
-      onboarding: new MetaMaskOnboarding(),
-      is_mount: false,
     }
 
-    // this.isExistAccount = this.isExistAccount.bind(this)
-    this.connectMetaMask = this.connectMetaMask.bind(this)
-    this.switchToAvalancheChain = this.switchToAvalancheChain.bind(this)
-    this.check_available_walletaddress = this.check_available_walletaddress.bind(this)
   }
 
-  async check_available_walletaddress(address) {
-    const address_q_rst = await axios.get(process.env.REACT_APP_API_BASE_URL+"/account/"+address)
-    console.log("check_address")
-    console.log(address_q_rst)
-
-    if (address_q_rst.data.length > 0) {
-      this.props.dispatch(setLoginFlag(true))
-      this.props.dispatch(setUsername(address_q_rst.data[0]['username']))
-      this.props.dispatch(setThaiID(address_q_rst.data[0]["thai_id"]))
-      // window.location.reload()
-    } else {
-      this.props.dispatch(setLoginFlag(false))
-    }
-  }
-
-  connectMetaMask () {
-    console.log("try to connect.")
-    // Request to connect to the MetaMask wallet
-    window.ethereum
-      .request({ method: 'eth_requestAccounts' })
-      .then(accounts => {
-        this.props.dispatch(changeWalletAccount(accounts))
-        if (accounts.length > 0) {
-          this.check_available_walletaddress(accounts[0])
-        }
-      })
-  }
-
-  switchToAvalancheChain () {
-    // Request to switch to the selected Avalanche network
-    window.ethereum
-      .request({
-        method: 'wallet_addEthereumChain',
-        params: [this.props.account_detail.AvalancheChain]
-      })
-  }
 
   componentDidMount() {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     console.log("Timezone = " + timezone);
     this.props.dispatch(updateTimeZone(timezone))
-    this.setState({
-      is_mount: true
-    });
+
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.is_mount !== this.state.is_mount) {
-      console.log(this.state.is_mount)
-      // componentDidMount
-      if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-        this.props.dispatch(setMMInstalledFlag(true))
-        this.connectMetaMask()
-
-        // chain
-        window.ethereum.request({method: 'net_version'}).then(chainId => {
-          this.props.dispatch(changeChainId(chainId))
-          console.log("net_version")
-        })
-
-        // Reload the site if the user selects a different chain
-        window.ethereum.on('chainChanged', (chainId) => {
-          this.props.dispatch(changeChainId(chainId))
-          console.log("chainChanged")
-          // window.location.reload()
-        })  
-
-        // Set the chain id once the MetaMask wallet is connected
-        window.ethereum.on('connect', (connectInfo) => {
-          const chainId = connectInfo.chainId
-          this.props.dispatch(changeChainId(chainId))
-          console.log("connect")
-        })
-
-        // Update the list of accounts if the user switches accounts in MetaMask
-        window.ethereum.on('accountsChanged', accounts => {
-          console.log("account did mount")
-          if (accounts.length > 0 && this.props.account_detail.wallet_accounts[0] !== accounts[0]) {
-            this.check_available_walletaddress(accounts[0])
-          }
-          this.props.dispatch(changeWalletAccount(accounts))
-        })
-
-      } else {
-        this.props.dispatch(setMMInstalledFlag(false))
-      }
-    }
-
-    if (this.props.account_detail.MetaMaskIsInstalled) {
-      if (this.props.account_detail.wallet_accounts.length > 0) {
-        // If the user is connected to MetaMask, stop the onboarding process.
-        this.state.onboarding.stopOnboarding()
-      }
-    }
+    
   }
 
   componentWillUnmount() {
@@ -164,6 +76,7 @@ class App extends React.Component {
 
   render() {
     return (
+      <AuthProvider>
       <HashRouter>
       <div className="App body-style">
         <Header></Header>
@@ -174,6 +87,7 @@ class App extends React.Component {
           <Route path="/event/:id" element={<Event_Detail/>}/>
           <Route path="/event/:id/seating" element={<Seating/>}/>
           <Route path="/purchase/:order_id" element={<Purchase/>}/>
+          <Route path="/order/:order_id" element={<Order/>}/>
           <Route path="/help/*" element={<Help/>}/>
           <Route path="/buy_test" element={<Buy_Test/>}/>
           <Route path="/organizer" element={<Home/>}/>
@@ -184,6 +98,7 @@ class App extends React.Component {
         </Routes>
       </div>
       </HashRouter>
+      </AuthProvider>
     )
   }
 }
