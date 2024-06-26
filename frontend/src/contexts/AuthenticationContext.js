@@ -261,7 +261,7 @@ class AuthProvider extends Component {
         .then(async(accounts) => {
             await this.props.dispatch(changeWalletAccount(accounts))
             if (accounts.length > 0) {
-                localStorage.setItem('current_account', accounts[0]);
+                window.sessionStorage.setItem('current_account', accounts[0]);
                 let is_existed = await this.update_regis_status(accounts[0])
             }
         })
@@ -290,7 +290,7 @@ class AuthProvider extends Component {
             if (MetaMaskOnboarding.isMetaMaskInstalled()) {
                 this.props.dispatch(setMMInstalledFlag(true))
 
-                const session_account = localStorage.getItem('current_account');
+                const session_account = window.sessionStorage.getItem('current_account');
                 console.log(session_account)
                 if (session_account === null) {
                     // this.connectMetaMask()
@@ -323,7 +323,7 @@ class AuthProvider extends Component {
                 window.ethereum.on('accountsChanged', async (accounts) => {
                     console.log("account did mount")
                     if (accounts.length > 0 && this.props.account_detail.wallet_accounts[0] !== accounts[0]) {
-                        localStorage.setItem('current_account', accounts[0]);
+                        window.sessionStorage.setItem('current_account', accounts[0]);
                         let is_existed = await this.update_regis_status(accounts[0])
                         // if (is_existed) {
                         //     connectWalletSwal.close({isConfirmed: true})
