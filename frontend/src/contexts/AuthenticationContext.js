@@ -40,7 +40,6 @@ class AuthProvider extends Component {
         }
 
         this.signUp = this.signUp.bind(this)
-        this.logout = this.logout.bind(this)
         this.update_regis_status = this.update_regis_status.bind(this)
         this.connectMetaMask = this.connectMetaMask.bind(this)
         this.connectClickHandler = this.connectClickHandler.bind(this)
@@ -228,16 +227,10 @@ class AuthProvider extends Component {
         })
     };
 
-    async logout() {
-        // Your logout logic (clear tokens, etc.)
-        await this.props.dispatch(setLoginFlag(true))
-    };
-
     async update_regis_status (account) {
         console.log("start update_regis_status")
         let {is_existed, username, thai_id} = await check_available_walletaddress(account)
         console.log({is_existed, username, thai_id})
-        await this.props.dispatch(setLoginFlag(is_existed))
         if (is_existed) {
             await this.props.dispatch(setUsername(username))
             await this.props.dispatch(setThaiID(thai_id))
@@ -245,6 +238,7 @@ class AuthProvider extends Component {
         } else {
             // connectWalletSwal.close({isDismissed: true, dismiss: "not registered"})
         }
+        await this.props.dispatch(setLoginFlag(is_existed))
         return is_existed
     }
 
@@ -359,8 +353,6 @@ class AuthProvider extends Component {
         return (
         <AuthenticationContext.Provider
             value={{ 
-                login: this.login, 
-                logout: this.logout,
                 connectWallet: this.connectWallet, 
             }}
         >

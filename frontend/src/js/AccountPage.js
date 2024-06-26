@@ -67,8 +67,9 @@ class AccountPage extends React.Component {
     console.log("update")
     console.log(this.props)
     if ( prevState.is_mount !== this.state.is_mount ) {
-      if (!this.props.account_detail.isLogin) {
-        const { connectWallet } = this.context;
+      const { connectWallet } = this.context;
+      const session_account = localStorage.getItem('current_account');
+      if (!this.props.account_detail.isLogin && session_account === null) {
         connectWallet(
           ()=>{},
           ()=>{this.props.navigate(-1)},
