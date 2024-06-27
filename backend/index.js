@@ -1992,7 +1992,7 @@ app.get("/orders", authentication, (req, res) => {
 			bind.push(req.query.event_id)
 		} 
 		if ('buyer' in req.query) {
-			conditions.push("buyer = ?")
+			conditions.push("LOWER(buyer) = LOWER(?)")
 			bind.push(req.query.buyer)
 		}
 		if ('order_id' in req.query) {
@@ -2011,6 +2011,26 @@ app.get("/orders", authentication, (req, res) => {
 				}
 				order_sql = order_sql.slice(0, -1) + ")"
 				conditions.push(order_sql)
+			}
+		}
+
+		if ('ticket_id' in req.query) {
+			let ticket_sql = "s.ticket_id "
+			let ticket_list = req.query.ticket_id.split(',')
+			console.log(ticket_list)
+
+			if (ticket_list.length === 1) {
+				ticket_sql += "= ?"
+				conditions.push(ticket_sql)
+				bind.push(ticket_list[0])
+			} else if (ticket_list.length > 1) {
+				ticket_sql += "in ("
+				for (let t_index = 0; t_index < ticket_list.length; t_index += 1) {
+					ticket_sql += "?,"
+					bind.push(ticket_list[t_index])
+				}
+				ticket_sql = ticket_sql.slice(0, -1) + ")"
+				conditions.push(ticket_sql)
 			}
 		}
 
@@ -2046,6 +2066,8 @@ app.get("/orders", authentication, (req, res) => {
 	    		return;
 			}
 		}
+		console.log(query)
+		console.log(bind)
     } else {
     	res.status(400);
     	res.send("request.query not found");
