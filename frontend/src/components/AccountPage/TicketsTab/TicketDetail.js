@@ -19,7 +19,9 @@ import {
   cancelProduct,
   get_addProduct_gasFee,
   get_2ndHand_price,
+  get_buyProduct_gasFee,
   get_cancelProduct_gasFee,
+  sortArrayByMultipleKeys,
 } from '../../../features/function'
 import { updateAllEvents } from '../../../features/events/eventSlice';
 // import MyTicketsPanel from './MyTicketsPanel'
@@ -39,6 +41,8 @@ class TicketDetail extends React.Component {
       content_loading: 1,
       is_mount: false,
       ticket_detail: {},
+      order_detail: {},
+      marketGasFee: BigNumber.from(0),
       sellPopupShown: false,
       cancelPopupShown: false,
       newInputPrice: 0,
@@ -282,11 +286,26 @@ class TicketDetail extends React.Component {
         await this.props.dispatch(updateAllEvents(event_detail))
       }
 
+      let order_detail = {}
+      const get_order_resp = await axios.get(process.env.REACT_APP_API_BASE_URL+"/orders?ticket_id="+ticket_detail.ticket_id+"&buver="+this.props.account_detail.wallet_accounts[0]+"&is_removed=false")
+      let filtered_orders = []
+      for (let order of get_order_resp.data) {
+        if (order.transaction !== null) {
+          filtered_orders.push(order)
+        }
+      }
+      if (filtered_orders.length > 0) {
+        let sorted_orders = sortArrayByMultipleKeys(filtered_orders, ["created_date"], ["created_date"], [1])
+        order_detail = sorted_orders[0]
+      }
+      
+
       let ticket_status = get_ticket_status(ticket_detail, this.props.events.all_events[ticket_detail.event_id])
       ticket_detail["ticket_status"] = ticket_status
 
       let fee = BigNumber.from(0)
-      let market_price = 0
+      let market_price = BigNumber.from(0)
+      let marketGas = BigNumber.from(0)
       if (ticket_status === "active") {
         fee = await get_addProduct_gasFee(
           this.props.ticket_id, 
@@ -301,14 +320,28 @@ class TicketDetail extends React.Component {
         )
         let {price: this_price} = await get_2ndHand_price(this.props.ticket_id)
         market_price = this_price
+        let fee = get_buyProduct_gasFee(this.props.ticket_id, this_price, process.env.REACT_APP_GETGAS_ACCOUNT)
+        marketGas = fee
       }
-      ticket_detail["market_price"] = market_price
+      console.log(order_detail)
+      let paid_price = BigNumber.from(order_detail.price)
+      let paid_fee = BigNumber.from(order_detail.fee)
+      let price = paid_price.add(paid_fee)
+
+
+      let market_fee = BigNumber.from(marketGas)
+      let total_market_price = market_price.add(market_fee)
+
+      ticket_detail["price"] = price._hex
+      ticket_detail["market_price"] = total_market_price._hex
 
       
 
       this.setState({
         content_loading: 0,
         ticket_detail: ticket_detail,
+        order_detail: order_detail,
+        marketGasFee: marketGas,
         fee: fee,
       }) 
     }
@@ -345,8 +378,8 @@ class TicketDetail extends React.Component {
       let event_detail = this.props.events.all_events[this.state.ticket_detail.event_id]
       let show_datetime_event = formatInTimeZone(new Date(event_detail.date_sell), this.props.account_detail.timezone, 'iiii d MMMM yyyy, HH:mm')
       let seat_id = this.state.ticket_detail.seat_row + this.state.ticket_detail.seat_id
-      let price = this.state.ticket_detail.price
-      let market_price = this.state.ticket_detail.market_price
+      let price = parseFloat(ethers.utils.formatEther(this.state.ticket_detail.price)).toFixed(4)
+      let market_price = parseFloat(ethers.utils.formatEther(this.state.ticket_detail.market_price)).toFixed(4)
       let ticket_status = this.state.ticket_detail.ticket_status
       let imgurl = "https://"+process.env.REACT_APP_S3_BUCKET+".s3."+process.env.REACT_APP_S3_REGION+".amazonaws.com/poster/" + event_detail.event_id + ".png"
       let snowtrace_link = "https://testnet.snowtrace.io/nft/"+ process.env.REACT_APP_TICKET_ADDRESS +"/"+ this.props.ticket_id +"?chainId=43113"
@@ -436,7 +469,7 @@ class TicketDetail extends React.Component {
                                           <span className="label">Your Price</span>
                                         </div>
                                         <div className="col-6 p-0 text-start">
-                                          <span className="ms-2 value">{ethers.utils.formatEther(market_price)}</span>
+                                          <span className="ms-2 value">{market_price}</span>
                                         </div>
                                       </div>
                                       <div className="row align-items-center">
@@ -444,14 +477,14 @@ class TicketDetail extends React.Component {
                                           <span className="ori-price">Original Price</span>
                                         </div>
                                         <div className="col-6 p-0">
-                                          <span className="ms-2 ori-price">{ethers.utils.formatEther(price)}</span>
+                                          <span className="ms-2 ori-price">{price}</span>
                                         </div>
                                       </div>
                                     </div>
                                   ) : (
                                     <div className="col-sm-2">
                                       <span className="label">Price</span>
-                                      <span className="ms-2 value">{ethers.utils.formatEther(price)}</span>
+                                      <span className="ms-2 value">{price}</span>
                                     </div>
                                   )
                                 }

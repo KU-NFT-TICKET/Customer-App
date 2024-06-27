@@ -73,18 +73,17 @@ export class Order extends React.Component {
     if (get_detail_resp.data.length > 0) {
         let ticketid_list = []
         for (let row of get_detail_resp.data) {
-            event_id = row.event_id
-            ticketid_list.push(row.ticket_id)
-            if (!Object.keys(this.props.events.all_events).includes(event_id)) {
-                console.time("get event api")
-                const get_event_resp = await axios.get(process.env.REACT_APP_API_BASE_URL+"/events/"+event_id)
-                console.timeEnd("get event api")
-                let event_detail = get_event_resp.data
-                await this.props.dispatch(updateAllEvents(event_detail))
-            }
-            seat_prices[row.ticket_id] = {price: row.price, fee: row.fee, trx: row.transaction}
-
             if (row.transaction !== null) {
+                event_id = row.event_id
+                ticketid_list.push(row.ticket_id)
+                if (!Object.keys(this.props.events.all_events).includes(event_id)) {
+                    console.time("get event api")
+                    const get_event_resp = await axios.get(process.env.REACT_APP_API_BASE_URL+"/events/"+event_id)
+                    console.timeEnd("get event api")
+                    let event_detail = get_event_resp.data
+                    await this.props.dispatch(updateAllEvents(event_detail))
+                }
+                seat_prices[row.ticket_id] = {price: row.price, fee: row.fee, trx: row.transaction}
                 order_detail.push(row)
             }
         }
