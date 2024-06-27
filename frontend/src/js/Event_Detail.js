@@ -2,6 +2,7 @@ import React from "react";
 import { ethers, BigNumber } from 'ethers'
 import Web3 from 'web3';
 import $, { data } from 'jquery';
+import DOMPurify from 'dompurify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDays, faLocationDot, faClock, faCalendarPlus, faCircleDollarToSlot, faTicket } from '@fortawesome/free-solid-svg-icons'
 import DatePicker from 'react-datepicker';
@@ -140,6 +141,8 @@ class Event_Detail extends React.Component {
     if (this.state.loading === false) {
       let imgurl_seat = "https://"+process.env.REACT_APP_S3_BUCKET+".s3."+process.env.REACT_APP_S3_REGION+".amazonaws.com/seat/" + this.props.event_id + ".png"
       let event_detail = this.props.events.all_events[this.props.event_id]
+      let clean_event_detail = DOMPurify.sanitize(event_detail.detail, {USE_PROFILES: {html: true}});
+      console.log(event_detail.detail)
       return (
         <div>
           <EventHeader 
@@ -160,7 +163,7 @@ class Event_Detail extends React.Component {
               <div className="row my-5">
                 <div className="col-sm-10 offset-sm-1">
                   <h1 className="mb-4">Detail</h1>
-                  <p style={{textAlign: 'left'}}>{event_detail.detail}</p>
+                  <div className="text-start" dangerouslySetInnerHTML={{ __html: clean_event_detail }} />
                 </div>
               </div>
             </div>

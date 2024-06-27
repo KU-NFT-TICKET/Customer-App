@@ -68,7 +68,7 @@ class EventHeader extends React.Component {
           <div className="col-sm-8 event-detail d-flex flex-column flex-wrap justify-content-around">
             <div className="row">
               <h1 className="event-title">{event_detail.event_name}</h1>
-              <span>{event_detail.detail}</span>
+              {/* <span>{event_detail.detail}</span> */}
             </div>
             <div className="row">
                 <div className="row">

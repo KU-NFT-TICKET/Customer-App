@@ -1056,6 +1056,14 @@ dl dt.legend-2nd, dl dd.legend-2nd{
   border-width: 0;
 }
 
+p.fee-explain-text {
+  text-indent: 50px;
+  line-height: 1.6 !important;
+}
+
+ul.fee-explain-list > li {
+  padding-bottom: 0.8rem;
+}
 
 /* =========================
 
