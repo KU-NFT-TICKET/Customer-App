@@ -30,6 +30,7 @@ export class Payment extends React.Component {
 
     this.state = {
       is_payment_processing: false,
+      is_mount: false,
     }
 
     this.baseState = this.state
@@ -205,10 +206,17 @@ export class Payment extends React.Component {
   
 
   componentDidMount() {
-    
+    this.setState({
+      is_mount: true
+    })
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (prevState.is_mount !== this.state.is_mount && this.state.is_mount) {
+      console.log("Payment didMount.")
+      this.purchase_all_tickets()
+    }
+
     if (prevProps.purchase.purchase_results !== this.props.purchase.purchase_results) {
       let completed_count = 0
       Object.keys(this.props.purchase.purchase_results).forEach(ticket_id => {
