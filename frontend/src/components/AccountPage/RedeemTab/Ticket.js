@@ -82,10 +82,10 @@ class Ticket extends React.Component {
                       let update_req = {
                         transaction: trx, 
                         owner: this.props.account_detail.wallet_accounts[0],
-                        is_redeem: 'Y',
+                        is_hold: null,
                       }
                       console.time("update seat api");
-                      const update_ticket_status_resp = await axios.post(process.env.REACT_APP_API_BASE_URL+"/seats/"+this.props.ticket_id, update_req)
+                      const update_ticket_status_resp = await axios.post(process.env.REACT_APP_API_BASE_URL+"/seats/"+this.props.ticket_detail.ticket_id, update_req)
                       console.timeEnd("update seat api");
                       console.log(update_ticket_status_resp)
 
