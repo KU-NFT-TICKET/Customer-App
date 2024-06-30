@@ -2017,7 +2017,6 @@ app.get("/orders", authentication, (req, res) => {
 		if ('ticket_id' in req.query) {
 			let ticket_sql = "s.ticket_id "
 			let ticket_list = req.query.ticket_id.split(',')
-			console.log(ticket_list)
 
 			if (ticket_list.length === 1) {
 				ticket_sql += "= ?"
@@ -2066,8 +2065,6 @@ app.get("/orders", authentication, (req, res) => {
 	    		return;
 			}
 		}
-		console.log(query)
-		console.log(bind)
     } else {
     	res.status(400);
     	res.send("request.query not found");
@@ -2481,6 +2478,10 @@ app.post("/seats/purchase/:ticket_id", authentication, (req, res) => {
 
 	if ('is_2ndHand' in req.body) {
 		update_seat_sql = "UPDATE Seats SET transaction = ?, owner = ?, in_marketplace = null, seller = null WHERE ticket_id = ?"
+	}
+
+	if ('is_redeem' in req.body) {
+		update_seat_sql = "UPDATE Seats SET transaction = ?, owner = ?, is_hold = null WHERE ticket_id = ?"
 	}
 
 	mysql_pool.getConnection(function(con_err, connection) {
