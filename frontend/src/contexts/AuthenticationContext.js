@@ -116,6 +116,7 @@ class AuthProvider extends Component {
             didClose: () => this.setState({ popupShown: false }),
             // showLoaderOnConfirm: true,
             preConfirm: async () => {
+                AuthenSwal.showLoading()
                 let regis_rst = {
                     err: 1, 
                     thai_id: "", 
@@ -202,13 +203,14 @@ class AuthProvider extends Component {
                     return regis_rst
                 }
                 } else {
+                    AuthenSwal.showLoading()
                     for (var i = 0; i < error_msg.length; i++) { error_msg[i] = "• " + error_msg[i] }
                     AuthenSwal.showValidationMessage(
                         "<span>" + error_msg.join("<br>") + "</span>"
                     )
                 } 
             },
-            allowOutsideClick: () => !AuthenSwal.isLoading()
+            allowOutsideClick: () => !AuthenSwal.hideLoading()
         }).then(async (result) => {
             console.log(result)
             if (result.isConfirmed) {
@@ -277,8 +279,9 @@ class AuthProvider extends Component {
     }
 
     componentDidMount() {
+        console.log(window.ethereum)
         this.setState({
-            is_mount: true
+            is_mount: true 
         })
         
     }

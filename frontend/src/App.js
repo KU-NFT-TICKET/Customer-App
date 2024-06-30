@@ -91,7 +91,7 @@ class App extends React.Component {
           <Route path="/help/*" element={<Help/>}/>
           <Route path="/buy_test" element={<Buy_Test/>}/>
           <Route path="/organizer" element={<Home/>}/>
-          <Route path="/organizer/create" element={<Buy_Test/>}/>
+          <Route path="/organizer/create" element={<Create/>}/>
           <Route path="/organizer/detail/:id" element={<Detail/>}/>
           <Route path="/404" element={<NotFoundPage/>} />
           {/* <Redirect to="/404" /> */}

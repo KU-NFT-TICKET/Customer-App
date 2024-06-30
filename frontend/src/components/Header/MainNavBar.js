@@ -85,7 +85,10 @@ class MainNavBar extends React.Component {
                 )
               }
             </div>
-            <div className="py-3 ps-3 organizer-btn"><NavLink to="/organizer" className="nav-link"> Organizer → </NavLink></div>
+            <div className="py-3 ps-3 organizer-btn">
+              <NavLink to="/organizer" className="nav-link"> Organizer → </NavLink>
+              {/* <a className="nav-link"> Organizer → </a> */}
+            </div>
           </div>
         </nav>
   	)

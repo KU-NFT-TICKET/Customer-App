@@ -54,7 +54,7 @@ class Tickets extends React.Component {
     console.log(get_ticket_resp)
 
     let my_tickets = get_ticket_resp.data
-    my_tickets = sortArrayByMultipleKeys(my_tickets, ['date_event', 'event_id', 'ticket_id'], ['date_event'], [0, 0, 0]);
+    my_tickets = sortArrayByMultipleKeys(my_tickets, ['date_event', 'event_id', 'ticket_id'], ['date_event'], [1, 1, 0]);
     // console.log(sorted_orders)
     for (let ticket_row of my_tickets) {
       if (!Object.keys(this.props.events.all_events).includes(ticket_row['event_id'].toString())) {

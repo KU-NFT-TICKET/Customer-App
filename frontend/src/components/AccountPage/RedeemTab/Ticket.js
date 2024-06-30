@@ -60,6 +60,7 @@ class Ticket extends React.Component {
             let error_msg = ""
             if (create_resp.error === 0) {
                 RedeemSwal.getConfirmButton().innerText = "Processing..."
+                RedeemSwal.showLoading()
                 
                 let resp = create_resp.resp
                 let trx = resp.hash

@@ -32,6 +32,7 @@ class ZoneDetail_V2 extends React.Component {
     super(props)
     this.state = {
         loading: 0,
+        zone_loading: false,
         show_resale: false,
         selectSeathtml: [],
     }
@@ -410,6 +411,7 @@ class ZoneDetail_V2 extends React.Component {
     this.props.dispatch(resetSeatSelection())
     this.setState({
       selectSeathtml: [],
+      zone_loading: true,
     })
 
     try {
@@ -543,6 +545,9 @@ class ZoneDetail_V2 extends React.Component {
     })
 
     this.legendRef.current.scrollIntoView()
+    this.setState({
+      zone_loading: false,
+    })
   }
 
   seat_check(event) {
@@ -596,6 +601,17 @@ class ZoneDetail_V2 extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.selectedZone !== this.props.selectedZone) {
         this.gen_selectSeat_html()
+    }
+
+    if (prevState.zone_loading !== this.state.zone_loading && this.state.zone_loading) {
+      console.log("zone start loading")
+      $("body").css("overflow", "hidden")
+      $("#overlay").show()
+    }
+    if (prevState.zone_loading !== this.state.zone_loading && !this.state.zone_loading) {
+      console.log("zone end loading")
+      $("#overlay").hide()
+      $("body").css("overflow", "auto")
     }
   }
 

@@ -3,7 +3,7 @@ import { BigNumber, ethers } from 'ethers'
 import Web3 from 'web3';
 import $ from 'jquery';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarDays, faLocationDot, faClock, faCalendarPlus, faCircleDollarToSlot, faTicket } from '@fortawesome/free-solid-svg-icons'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import DatePicker from 'react-datepicker';
 import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
@@ -439,6 +439,11 @@ export class Seating extends React.Component {
                   />
                 ) : null
               }
+            </div>
+            <div id="overlay">
+              <div id="overlay-loading">
+              <FontAwesomeIcon icon={faSpinner} size="lg" inverse />
+              </div>
             </div>
           </div>
         )

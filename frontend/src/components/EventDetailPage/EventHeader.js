@@ -61,7 +61,7 @@ class EventHeader extends React.Component {
     }
 
     return (
-      <div className="event-header bg-cover-blur">
+      <div className="event-header bg-cover-blur" style={{backgroundImage: "url(" + imgurl + ")"}}>
       <div className="bg-overlay">
       <div className="container-lg">
         <div className="row">
