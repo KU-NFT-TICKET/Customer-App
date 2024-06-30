@@ -97,7 +97,7 @@ class Ticket extends React.Component {
                         func_name : func_name,
                         price : 0,
                         fee : totalFee.toString(),
-                        ticket_id : this.props.ticket_detail.ticket_id,
+                        ticket_id : [this.props.ticket_detail.ticket_id],
                         executed_date : (new Date()).toISOString(),
                       }
                       console.time("create order api");
