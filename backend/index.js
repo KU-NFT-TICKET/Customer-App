@@ -2410,6 +2410,18 @@ app.get("/hold_tickets", authentication, (req, res) => {
     		res.send("request.query invalid");
     		return;
 		}
+
+		if ('is_redeemed' in req.query) {
+			if (req.query.is_redeemed === 'false') {
+				query += " and s.is_hold = 'Y'"
+			} else if (req.query.is_redeemed === 'true') {
+				query += " and s.is_hold = null"
+			} else {
+				res.status(400);
+				res.send("<is_redeemed> must be 'false' or 'true'");
+				return;
+			}
+		}
 		
     } else {
     	res.status(400);

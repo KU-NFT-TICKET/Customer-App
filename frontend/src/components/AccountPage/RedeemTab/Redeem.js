@@ -33,7 +33,7 @@ class Redeem extends React.Component {
     let fee = BigNumber.from(0)
     let purchase_forms = {}
     let ticket_mapping = []
-    let get_hold_tickets_resp = await axios.get(process.env.REACT_APP_API_BASE_URL+"/hold_tickets?receiver=" + this.props.account_detail.wallet_accounts[0].toLowerCase())
+    let get_hold_tickets_resp = await axios.get(process.env.REACT_APP_API_BASE_URL+"/hold_tickets?receiver=" + this.props.account_detail.wallet_accounts[0].toLowerCase() + "&is_redeemed=false")
     let my_redeems = get_hold_tickets_resp.data
     for (let ticket_row of my_redeems) {
       run_count += 1
