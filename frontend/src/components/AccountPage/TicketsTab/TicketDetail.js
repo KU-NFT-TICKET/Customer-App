@@ -93,6 +93,7 @@ class TicketDetail extends React.Component {
             let error_msg = ""
             if (sell_resp.error === 0) {
                 SellSwal.getConfirmButton().innerText = "Processing..."
+                SellSwal.showLoading()
                 
                 let resp = sell_resp.resp
                 let trx = resp.hash
@@ -192,6 +193,7 @@ class TicketDetail extends React.Component {
             let error_msg = ""
             if (cancel_resp.error === 0) {
                 CancelSwal.getConfirmButton().innerText = "Processing..."
+                CancelSwal.showLoading()
                 
                 let resp = cancel_resp.resp
                 let trx = resp.hash
@@ -278,7 +280,6 @@ class TicketDetail extends React.Component {
       this.props.navigate('/404')
     } else {
       let ticket_detail = get_ticket_resp.data[0]
-
       
       if (!Object.keys(this.props.events.all_events).includes(ticket_detail.event_id.toString())) {
         const get_event_resp = await axios.get(process.env.REACT_APP_API_BASE_URL+"/events/"+ticket_detail.event_id)
@@ -305,7 +306,7 @@ class TicketDetail extends React.Component {
 
       let fee = BigNumber.from(0)
       let market_price = BigNumber.from(0)
-      let marketGas = BigNumber.from(0)
+      let market_fee = BigNumber.from(0)
       if (ticket_status === "active") {
         fee = await get_addProduct_gasFee(
           this.props.ticket_id, 
@@ -320,16 +321,12 @@ class TicketDetail extends React.Component {
         )
         let {price: this_price} = await get_2ndHand_price(this.props.ticket_id)
         market_price = this_price
-        let fee = get_buyProduct_gasFee(this.props.ticket_id, this_price, process.env.REACT_APP_GETGAS_ACCOUNT)
-        marketGas = fee
+        market_fee = await get_buyProduct_gasFee(this.props.ticket_id, this_price, this.props.account_detail.wallet_accounts[0])
       }
-      console.log(order_detail)
       let paid_price = BigNumber.from(order_detail.price)
       let paid_fee = BigNumber.from(order_detail.fee)
       let price = paid_price.add(paid_fee)
 
-
-      let market_fee = BigNumber.from(marketGas)
       let total_market_price = market_price.add(market_fee)
 
       ticket_detail["price"] = price._hex
@@ -341,7 +338,7 @@ class TicketDetail extends React.Component {
         content_loading: 0,
         ticket_detail: ticket_detail,
         order_detail: order_detail,
-        marketGasFee: marketGas,
+        marketGasFee: market_fee,
         fee: fee,
       }) 
     }
@@ -474,7 +471,7 @@ class TicketDetail extends React.Component {
                                       </div>
                                       <div className="row align-items-center">
                                         <div className="col-6 p-0 text-start">
-                                          <span className="ori-price">Original Price</span>
+                                          <span className="ori-price label">Original Price</span>
                                         </div>
                                         <div className="col-6 p-0">
                                           <span className="ms-2 ori-price">{price}</span>
